@@ -3,7 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 db = SQLAlchemy()
 
 
-class Game(db.model):
+class Game(db.Model):
     __tablename__ = 'GameInfo'
     game_id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(30), nullable=False)
@@ -13,7 +13,7 @@ class Game(db.model):
     def getReferenceURL(self, id: int) -> str:
         pass
 
-class User(db.model):
+class User(db.Model):
     __tablename__ = 'UserInfo'
     phone = db.Column(db.Integer, primary_key=True)
     password = db.Column(db.Text, nullable=False)
@@ -34,7 +34,7 @@ class User(db.model):
 
 
 
-class Register(db.model):
+class Register(db.Model):
     __tablename__ = 'Register'
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     game_id = db.Column(db.Integer, db.ForeignKey('game.id'))
