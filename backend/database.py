@@ -36,8 +36,8 @@ class User(db.Model):
 
 class Register(db.Model):
     __tablename__ = 'Register'
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    game_id = db.Column(db.Integer, db.ForeignKey('game.id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), primary_key=True)
+    game_id = db.Column(db.Integer, db.ForeignKey('game.id'), primary_key=True)
 
     def getPlayersPerGame(self, game: int) -> int:
         pass
