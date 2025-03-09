@@ -10,7 +10,7 @@ class Game(db.model):
     reference = db.Column(db.Text, )
     reg = db.relationship("Game", backref='game')
 
-    def getReferenceURL(self, id):
+    def getReferenceURL(self, id: int) -> str:
         pass
 
 class User(db.model):
@@ -20,19 +20,16 @@ class User(db.model):
     group = db.Column(db.Integer)
     reg = db.relationship('User', backref='user')
 
-    def fetch_all_phone(self):
+    def fetch_all_phone(self) -> list:
         pass
 
-    def getGroupViaPlayer(self, user):
+    def getGroupViaPlayer(self, user: int) -> int:
         pass
 
-    def getAllPlayersViaGroup(self, grp):
+    def getAllPlayersViaGroup(self, grp: int) -> int:
         pass
 
-    def getPlayerViaPhone(self, user):
-        pass
-
-    def removePlayer(self,user):
+    def removePlayer(self, user: int) -> None:
         pass
 
 
@@ -42,8 +39,8 @@ class Register(db.model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     game_id = db.Column(db.Integer, db.ForeignKey('game.id'))
 
-    def getPlayersPerGame(self, game):
+    def getPlayersPerGame(self, game: int) -> int:
         pass
 
-    def getGamesPerPlayer(self, user):
+    def getGamesPerPlayer(self, user: int) -> int:
         pass
