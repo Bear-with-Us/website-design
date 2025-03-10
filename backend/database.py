@@ -8,7 +8,6 @@ class Game(db.Model):
     game_id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(30), nullable=False)
     reference = db.Column(db.Text, )
-    reg = db.relationship("Game", backref='game')
 
     def getReferenceURL(self, id: int) -> str:
         pass
@@ -18,7 +17,6 @@ class User(db.Model):
     phone = db.Column(db.Integer, primary_key=True)
     password = db.Column(db.Text, nullable=False)
     group = db.Column(db.Integer)
-    reg = db.relationship('User', backref='user')
 
     def fetch_all_phone(self) -> list:
         pass
@@ -32,12 +30,10 @@ class User(db.Model):
     def removePlayer(self, user: int) -> None:
         pass
 
-
-
 class Register(db.Model):
     __tablename__ = 'Register'
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), primary_key=True)
-    game_id = db.Column(db.Integer, db.ForeignKey('game.id'), primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('UserInfo.phone'), primary_key=True)
+    game_id = db.Column(db.Integer, db.ForeignKey('GameInfo.phone'), primary_key=True)
 
     def getPlayersPerGame(self, game: int) -> int:
         pass
