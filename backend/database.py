@@ -39,8 +39,8 @@ class User(db.Model):
 
 class Register(db.Model):
     __tablename__ = 'Register'
-    user_id = db.Column(db.Integer, db.ForeignKey('UserInfo.phone'), primary_key=True)  # ✅ Corrected
-    game_id = db.Column(db.Integer, db.ForeignKey('GameInfo.game_id'), primary_key=True)  # ✅ Corrected
+    user_id = db.Column(db.Integer, db.ForeignKey('UserInfo.phone'), primary_key=True)
+    game_id = db.Column(db.Integer, db.ForeignKey('GameInfo.game_id'), primary_key=True)
 
     def getPlayersPerGame(self, game: int) -> int:
         return db.session.query(Register).filter_by(game_id=game).count()
