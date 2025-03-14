@@ -8,7 +8,6 @@ class Game(db.Model):
     game_id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(30), nullable=False)
     reference = db.Column(db.String(255))  # URL-friendly size
-    reg = db.relationship("Game", backref='game')
 
     def getReferenceURL(self, id: int) -> str:
         game = db.session.get(Game, id)
@@ -19,10 +18,9 @@ class User(db.Model):
     phone = db.Column(db.Integer, primary_key=True)
     password = db.Column(db.Text, nullable=False)
     group = db.Column(db.Integer)
-    reg = db.relationship('User', backref='user')
 
     def fetch_all_phone(self) -> list:
-        hones = db.session.query(User.phone).all()
+        phones = db.session.query(User.phone).all()
         return [phone[0] for phone in phones]
 
     def getGroupViaPlayer(self, user: int) -> int:
@@ -41,12 +39,11 @@ class User(db.Model):
 
 class Register(db.Model):
     __tablename__ = 'Register'
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), primary_key=True)
-    game_id = db.Column(db.Integer, db.ForeignKey('game.id'), primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('UserInfo.phone'), primary_key=True)  # ✅ Corrected
+    game_id = db.Column(db.Integer, db.ForeignKey('GameInfo.game_id'), primary_key=True)  # ✅ Corrected
 
     def getPlayersPerGame(self, game: int) -> int:
         return db.session.query(Register).filter_by(game_id=game).count()
 
     def getGamesPerPlayer(self, user: int) -> int:
         return db.session.query(Register).filter_by(user_id=user).count()
-
