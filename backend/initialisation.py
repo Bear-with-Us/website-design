@@ -2,8 +2,6 @@ import sqlite3 as sql
 conn = sql.connect("VR3.db")
 cur = conn.cursor()
 
-
-
 cur.execute('''
 CREATE TABLE IF NOT EXISTS UserInfo (
     phone INTEGER PRIMARY KEY,
