@@ -1,5 +1,7 @@
 import json
 import logging
+from distutils.command.register import register
+
 from flask import Flask, render_template, url_for, request, session, redirect
 from sqlalchemy.exc import SQLAlchemyError
 from database import db, User, Game, UserToGameId
@@ -25,8 +27,8 @@ def home():
     if 'user_id' in session:
         return render_template("index.html")
     else:
-        #return flask.redirect(url_for('login'))
-        return render_template("web.html")
+        return flask.redirect(url_for('login'))
+        #return render_template("index.html")
 
 
 
@@ -77,8 +79,11 @@ def admin():
 
 @app.route('/day1', methods=['POST', 'GET'])
 def day1():
-    game_list = db.query(Game).all()
-    return render_template("day1.html", game_list=game_list)
+    game_list = db.query(Game).filter_by(type='day1').all()
+    space_reserved = {}
+    for game,  in game_list:
+        space_reserved[game.id] = db.query(UserToGameId).filter(game_id=game.game_id).count()
+    return render_template("day1.html", game_list=game_list, space_reserved=space_reserved)
 
 
 @app.route('/day2', methods=['POST', 'GET'])
