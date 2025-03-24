@@ -1,5 +1,7 @@
 import json
 import logging
+from distutils.command.register import register
+
 from flask import Flask, render_template, url_for, request, session, redirect
 from sqlalchemy.exc import SQLAlchemyError
 from database import db, User, Game, UserToGameId
@@ -25,17 +27,14 @@ def home():
     if 'user_id' in session:
         return render_template("index.html")
     else:
-        # return flask.redirect(url_for('login'))
-        return render_template("web.html")
+        return flask.redirect(url_for('login'))
+        #return render_template("index.html")
+
+
 
 
 @app.route('/admin', methods=['POST', 'GET'])
 def admin():
-    """admin page that allows:
-    1. upload files to the database
-    2. TBD"""
-
-    # Upload the given file to the User table
     if "UserData" in request.files:
         user_file = request.files['UserData']
         data = json.load(user_file)
@@ -49,7 +48,6 @@ def admin():
                 db.session.rollback()
                 logging.info(f"❌ Commit failed: {e}")
 
-    # Upload the given file to the Game table
     if "GameData" in request.files:
         game_file = request.files['GameData']
         data = json.load(game_file)
@@ -63,7 +61,6 @@ def admin():
                 db.session.rollback()
                 print(f"❌ Commit failed: {e}")
 
-    # Upload to the register with data in the given file
     if "Register" in request.files:
         reg_file = request.files['Register']
         data = json.load(reg_file)
@@ -82,26 +79,29 @@ def admin():
 
 @app.route('/day1', methods=['POST', 'GET'])
 def day1():
-    """This is the page for day1 games"""
-    game_list = db.query(Game).all()
-    return render_template("day1.html", game_list=game_list)
+    game_list = db.query(Game).filter_by(type='day1').all()
+    space_reserved = {}
+    for game,  in game_list:
+        space_reserved[game.id] = db.query(UserToGameId).filter(game_id=game.id).count()
+    return render_template("day1.html", game_list=game_list, space_reserved=space_reserved)
 
-
+@app.route('/add_player', methods=['POST', 'GET'])
+def add_player():
+    data = request.get_json()
+    game_id = data['id']
+    new_register = UserToGameId(game_id=game_id, user_id=session['user_id'])
+    db.query(UserToGameId).add(new_register)
+    db.session.commit()
 @app.route('/day2', methods=['POST', 'GET'])
 def day2():
-    """This is the page for day2 games"""
     return render_template("day2.html")
 
 
 @app.route('/login', methods=['POST', 'GET'])
 def login():
-    """Login page"""
-
-    # Check if the user is already signed in
     if 'user_id' in session:
         return render_template("index.html")
 
-    # Login in system
     if request.method == 'POST':
         username = request.form.get('username')
         password = request.form.get('password')

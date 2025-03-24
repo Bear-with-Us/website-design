@@ -1,0 +1,9 @@
+body {
+    background-image: url("background/VR3.png");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    height: 100vh;
+    margin: 0;
+    font-family: sans-serif;
+}

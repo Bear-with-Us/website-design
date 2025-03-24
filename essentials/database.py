@@ -6,11 +6,12 @@ db = SQLAlchemy()
 
 class Game(db.Model):
     __tablename__ = 'GameInfo'
-    game_id = db.Column(db.Text, primary_key=True)
+    id = db.Column(db.Text, primary_key=True)
     name = db.Column(db.Text, nullable=False)
     kp = db.Column(db.Text, nullable=False)
     type = db.Column(db.String(10), nullable=False)
     time = db.Column(db.DateTime, nullable=False)
+    rule = db.Column(db.Text, nullable=False)
     description = db.Column(db.Text)
     QR_code = db.Column(db.Text)
     max_pl = db.Column(db.Integer, nullable=False)
