@@ -1,7 +1,5 @@
 import json
 import logging
-from distutils.command.register import register
-
 from flask import Flask, render_template, url_for, request, session, redirect
 from sqlalchemy.exc import SQLAlchemyError
 from database import db, User, Game, UserToGameId
@@ -82,14 +80,14 @@ def day1():
     game_list = db.query(Game).filter_by(type='day1').all()
     space_reserved = {}
     for game,  in game_list:
-        space_reserved[game.id] = db.query(UserToGameId).filter(game_id=game.id).count()
+        space_reserved[game.id] = db.query(UserToGameId).filter(id=game.id).count()
     return render_template("day1.html", game_list=game_list, space_reserved=space_reserved)
 
 @app.route('/add_player', methods=['POST', 'GET'])
 def add_player():
     data = request.get_json()
     game_id = data['id']
-    new_register = UserToGameId(game_id=game_id, user_id=session['user_id'])
+    new_register = UserToGameId(id=game_id, user_id=session['user_id'])
     db.query(UserToGameId).add(new_register)
     db.session.commit()
 @app.route('/day2', methods=['POST', 'GET'])
