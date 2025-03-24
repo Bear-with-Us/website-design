@@ -1,10 +1,60 @@
 {% extends 'base.html' %}
 {% block head %}
 <title>共振幻想 3.0</title>
-<h1>Day1 团表</h1>
+
 {% endblock %}
 {% body block %}
+    <h1>Day1 团表</h1>
     <table>
+    <ul>
+    {% for game in game_list %}
+        <li>
+            {{ game.name }}<br>
+            {{ game.kp }}<br>
+            {{game.type}}<br>
+            {{game.time}}<br>
+            描述: {{game.description}}<br>
+            剩余位置: {{game.max_pl}} <br>
 
+            <br><br>
+            <button onclick="showMessage()">加入</button>
+            {% if game.max_pl > 0 and 'User_id' in session %}
+            <div class="overlay" id="overlay1"></div>
+            <div class="popup" id="popup1">
+                <img src="{{ game.QR_code }}" alt="群二维码">
+                <button onclick="hideMessage()">关闭</button>
+            </div>
+            {% elif game.max_pl == 5 and 'User_id' in session %}
+            <div class="overlay" id="overlay2"></div>
+            <div class="popup" id="popup2">
+                <p>人数已满</p>
+                <button onclick="hideMessage()">关闭</button>
+            </div>
+            {% else %}
+            <div class="overlay" id="overlay3"></div>
+            <div class="popup" id="popup3">
+                <p>请先登录</p>
+                <button onclick="hideMessage()">关闭</button>
+                <a href="{{ url_for('login') }}">
+                    <button type="button">登录</button>
+                </a>
+            </div>
+            {% endif %}
+        </li>
+
+    {% endfor %}
+    </ul>
     </table>
+    <script>
+        // 定义 showMessage 函数，用于显示信息窗口
+        function showMessage() {
+            document.getElementById('popup').style.display = 'block';
+            document.getElementById('overlay').style.display = 'block';
+        }
+        // 定义 hideMessage 函数，用于隐藏信息窗口
+        function hideMessage() {
+            document.getElementById('popup').style.display = 'none';
+            document.getElementById('overlay').style.display = 'none';
+        }
+    </script>
 {% endblock %}

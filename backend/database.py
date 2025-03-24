@@ -12,7 +12,8 @@ class Game(db.Model):
     type = db.Column(db.String(10), nullable=False)
     time = db.Column(db.DateTime, nullable=False)
     description = db.Column(db.Text)
-    QR_code = db.Column(db.LargeBinary)
+    QR_code = db.Column(db.Text)
+    max_pl = db.Column(db.Integer, nullable=False)
 
     @staticmethod
     def getGamesViaType(cls):

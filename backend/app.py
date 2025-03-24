@@ -1,12 +1,21 @@
+import json
+import logging
 from flask import Flask, render_template, url_for, request, session, redirect
+from sqlalchemy.exc import SQLAlchemyError
 from database import db, User, Game, UserToGameId
 import flask
-from werkzeug.security import check_password_hash
+
 from flask_sqlalchemy import SQLAlchemy
 
+logging.basicConfig(level=logging.INFO)
 app = Flask('FlaskWeb')
 app.config['SECRET_KEY'] = 'mysecretkey123'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///VR3.db'
+db.init_app(app)
+
+
+def initialise_db():
+    db.create_all()
 
 
 @app.route('/')
@@ -17,17 +26,59 @@ def home():
         return render_template("index.html")
     else:
         #return flask.redirect(url_for('login'))
-        return render_template("index.html")
+        return render_template("web.html")
+
+
 
 
 @app.route('/admin', methods=['POST', 'GET'])
 def admin():
+    if "UserData" in request.files:
+        user_file = request.files['UserData']
+        data = json.load(user_file)
+        for item in data:
+            new_user = User(**item)
+            db.session.add(new_user)
+            try:
+                db.session.commit()
+                logging.info("✅ Game data committed successfully.")
+            except SQLAlchemyError as e:
+                db.session.rollback()
+                logging.info(f"❌ Commit failed: {e}")
+
+    if "GameData" in request.files:
+        game_file = request.files['GameData']
+        data = json.load(game_file)
+        for item in data:
+            new_game = Game(**item)
+            db.session.add(new_game)
+            try:
+                db.session.commit()
+                print("✅ Game data committed successfully.")
+            except SQLAlchemyError as e:
+                db.session.rollback()
+                print(f"❌ Commit failed: {e}")
+
+    if "Register" in request.files:
+        reg_file = request.files['Register']
+        data = json.load(reg_file)
+        for item in data:
+            new_pair = UserToGameId(**item)
+            db.session.add(new_pair)
+            try:
+                db.session.commit()
+                print("✅ Game data committed successfully.")
+            except SQLAlchemyError as e:
+                db.session.rollback()
+                print(f"❌ Commit failed: {e}")
+
     return render_template("admin.html")
 
 
 @app.route('/day1', methods=['POST', 'GET'])
 def day1():
-    return render_template("day1.html")
+    game_list = db.query(Game).all()
+    return render_template("day1.html", game_list=game_list)
 
 
 @app.route('/day2', methods=['POST', 'GET'])
@@ -43,7 +94,7 @@ def login():
     if request.method == 'POST':
         username = request.form.get('username')
         password = request.form.get('password')
-        if username == " " and password == " ":
+        if username == "123" and password == "123":
             return redirect("admin")
         if User.exist(username):
             if User.isCorrect(username=username, password=password):
@@ -65,4 +116,7 @@ def logout():
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    with app.app_context():
+        initialise_db()
+
+    app.run(debug=True, use_reloader=False)
