@@ -28,6 +28,7 @@ class Game(db.Model):
     def isClashedTime(id1, id2) -> bool:
         return db.session.get(Game, id1).time == db.session.get(Game, id2).time
 
+
 class User(db.Model):
     __tablename__ = 'UserInfo'
     phone = db.Column(db.Integer, primary_key=True)
