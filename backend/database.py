@@ -6,7 +6,7 @@ db = SQLAlchemy()
 
 class Game(db.Model):
     __tablename__ = 'GameInfo'
-    game_id = db.Column(db.Text, primary_key=True)
+    id = db.Column(db.Text, primary_key=True)
     name = db.Column(db.Text, nullable=False)
     kp = db.Column(db.Text, nullable=False)
     type = db.Column(db.String(10), nullable=False)

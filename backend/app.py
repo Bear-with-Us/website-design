@@ -82,10 +82,16 @@ def day1():
     game_list = db.query(Game).filter_by(type='day1').all()
     space_reserved = {}
     for game,  in game_list:
-        space_reserved[game.id] = db.query(UserToGameId).filter(game_id=game.game_id).count()
+        space_reserved[game.id] = db.query(UserToGameId).filter(game_id=game.id).count()
     return render_template("day1.html", game_list=game_list, space_reserved=space_reserved)
 
-
+@app.route('/add_player', methods=['POST', 'GET'])
+def add_player():
+    data = request.get_json()
+    game_id = data['id']
+    new_register = UserToGameId(game_id=game_id, user_id=session['user_id'])
+    db.query(UserToGameId).add(new_register)
+    db.session.commit()
 @app.route('/day2', methods=['POST', 'GET'])
 def day2():
     return render_template("day2.html")
