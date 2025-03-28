@@ -3,9 +3,9 @@ import logging
 from flask import Flask, render_template, url_for, request, session, redirect
 from sqlalchemy.exc import SQLAlchemyError
 from database import db, User, Game, UserToGameId
-import flask
 
-from flask_sqlalchemy import SQLAlchemy
+from datetime import datetime
+
 
 logging.basicConfig(level=logging.INFO)
 app = Flask('FlaskWeb')
@@ -25,10 +25,8 @@ def home():
     if 'user_id' in session:
         return render_template("index.html")
     else:
-        return flask.redirect(url_for('login'))
-        #return render_template("index.html")
-
-
+        #return flask.redirect(url_for('login'))
+        return render_template("index.html")
 
 
 @app.route('/admin', methods=['POST', 'GET'])
@@ -50,6 +48,7 @@ def admin():
         game_file = request.files['GameData']
         data = json.load(game_file)
         for item in data:
+            item["time"] = datetime.fromisoformat(item['time'])
             new_game = Game(**item)
             db.session.add(new_game)
             try:
@@ -75,13 +74,15 @@ def admin():
     return render_template("admin.html")
 
 
-@app.route('/day1', methods=['POST', 'GET'])
+@app.route('/Day1', methods=['POST', 'GET'])
 def day1():
-    game_list = db.query(Game).filter_by(type='day1').all()
+    game_list = Game.query.filter_by(type='Day2').all()
+    #game_list = db.query(Game).filter_by(type='Day1').all()
     space_reserved = {}
-    for game,  in game_list:
-        space_reserved[game.id] = db.query(UserToGameId).filter(id=game.id).count()
-    return render_template("day1.html", game_list=game_list, space_reserved=space_reserved)
+    for game in game_list:
+        space_reserved[game.id] = db.session.query(UserToGameId).filter_by(game_id=game.id).count()
+    logging.info(game_list)
+    return render_template("Day1.html", game_list=game_list, space_reserved=space_reserved)
 
 @app.route('/add_player', methods=['POST', 'GET'])
 def add_player():
@@ -90,9 +91,9 @@ def add_player():
     new_register = UserToGameId(id=game_id, user_id=session['user_id'])
     db.query(UserToGameId).add(new_register)
     db.session.commit()
-@app.route('/day2', methods=['POST', 'GET'])
+@app.route('/Day2', methods=['POST', 'GET'])
 def day2():
-    return render_template("day2.html")
+    return render_template("Day2.html")
 
 
 @app.route('/login', methods=['POST', 'GET'])
@@ -121,7 +122,7 @@ def logout():
     # Clear user session
     session.pop('user_id', None)
     session.pop('username', None)
-    return flask.redirect(url_for('login'))
+    return redirect(url_for('login'))
 
 
 if __name__ == "__main__":

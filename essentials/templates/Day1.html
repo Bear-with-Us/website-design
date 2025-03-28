@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+{% block head %}
+<title>共振幻想 3.0</title>
+{% endblock %}
+
+{% block body %}
+    <h1>Day1 团表</h1>
+
+    <ul>
+      {% for game in game_list %}
+      <li>
+        {{ game.name }}<br>
+        {{ game.kp }}<br>
+        {{ game.type }}<br>
+        {{ game.time }}<br>
+        规则：{{ game.rule }}<br>
+        描述: {{ game.description }}<br>
+        剩余位置: {{ game.max_pl - space_reserved[game.id] }}<br>
+
+        <!-- Give each button/pop-up a unique index with loop.index to avoid ID conflicts -->
+        <button
+          onclick="showMessage(this)"
+          data-remaining="{{ game.max_pl - space_reserved[game.id] }}"
+          data-logged-in="{{ 'user_id' in session }}"
+          data-game-id="{{ game.id }}"
+          data-qr="{{ game.QR_code }}">加入</button>
+
+        <div class="overlay" id="overlay"></div>
+        <div class="popup" id="popup-content">
+          <div id="popup-inner"></div>
+          <button onclick="hideMessage()">关闭</button>
+        </div>
+      </li>
+      <br><br>
+      {% endfor %}
+    </ul>
+
+    <script>
+        // 定义 showMessage 函数，用于显示信息窗口
+        function showMessage(button) {
+          const remaining = parseInt(button.dataset.remaining);
+          const loggedIn = button.dataset.loggedIn === 'True';
+          const gameId = button.dataset.gameId;
+          const qrCode = button.dataset.qr;
+
+          const overlay = document.getElementById('overlay');
+          const popup = document.getElementById('popup-content');
+          const inner = document.getElementById('popup-inner');
+
+          overlay.style.display = 'block';
+          popup.style.display = 'block';
+
+          // Dynamic HTML depending on condition
+          if (remaining > 0 && loggedIn) {
+            inner.innerHTML = `
+              <button onclick="sendGameData('${gameId}')">加入</button>
+              <img src="/static/background/${qrCode}" alt="群二维码">
+            `;
+          } else if (remaining === 0 && loggedIn) {
+            inner.innerHTML = `<p>人数已满</p>`;
+          } else {
+            inner.innerHTML = `
+              <p>请先登录</p>
+              <a href="/login"><button type="button">登录</button></a>
+            `;
+          }
+        }
+
+        function hideMessage() {
+          document.getElementById('overlay').style.display = 'none';
+          document.getElementById('popup-content').style.display = 'none';
+        }
+
+
+        function sendGameData(gameId) {
+            fetch('/add_player', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    id: gameId
+                })
+            })
+            .then(res => res.json())
+            .then(data => {
+                console.log('Backend response:', data);
+            });
+    }
+    </script>
+{% endblock %}
