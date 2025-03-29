@@ -65,7 +65,40 @@
             `;
           }
         }
+        function openPopup() {
+      document.getElementById('overlay').style.display = 'flex';
+    }
 
+    // Closes the popup
+    function closePopup() {
+      document.getElementById('overlay').style.display = 'none';
+    }
+
+    // Handle form submission without reloading the page
+    function handleFormSubmit(event) {
+      event.preventDefault();  // Prevents default submission
+
+      // Grab form data
+      const username = document.getElementById('username').value;
+      const age = document.getElementById('age').value;
+      const message = document.getElementById('message').value;
+
+      // Show result inside #result <div>
+      const resultDiv = document.getElementById('result');
+      resultDiv.innerHTML = `
+        <p>Welcome, ${username} (Age: ${age})!</p>
+        <p>Your message: "${message}"</p>
+      `;
+
+      // Optionally send this data to your server with fetch():
+      // fetch('/my_endpoint', {
+      //   method: 'POST',
+      //   headers: { 'Content-Type': 'application/json' },
+      //   body: JSON.stringify({ username, age, message })
+      // }).then(...);
+
+      // Clear the form fields
+      event.target.reset();}
         function hideMessage() {
           document.getElementById('overlay').style.display = 'none';
           document.getElementById('popup-content').style.display = 'none';
