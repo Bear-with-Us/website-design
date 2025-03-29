@@ -64,20 +64,16 @@ class User(db.Model):
 
     @staticmethod
     def isCorrect(username: str, password: str) -> bool:
-        """验证密码（保持原有数据格式）"""
         try:
             # 将输入转换为数据库存储格式
             phone_number = int(username)  # 将字符串转为Integer
             password_str = str(password).strip()  # 转为Text格式
 
-            # 安全查询方式
             user = User.query.filter_by(phone=phone_number).first()
 
-            # 比较密码（保持明文比较）
             return user and (user.password == password_str)
 
         except ValueError:
-            # 处理非数字用户名输入
             print("手机号必须为纯数字")
             return False
         except Exception as e:
