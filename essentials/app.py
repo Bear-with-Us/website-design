@@ -3,7 +3,7 @@ import logging
 from flask import Flask, render_template, url_for, request, session, redirect
 from sqlalchemy.exc import SQLAlchemyError
 from database import db, User, Game, UserToGameId
-
+from sqlalchemy.exc import IntegrityError
 from datetime import datetime
 
 
@@ -25,8 +25,8 @@ def home():
     if 'user_id' in session:
         return render_template("index.html")
     else:
-        #return flask.redirect(url_for('login'))
-        return render_template("index.html")
+        return redirect(url_for('login'))
+
 
 
 @app.route('/admin', methods=['POST', 'GET'])
@@ -84,13 +84,32 @@ def day1():
     logging.info(game_list)
     return render_template("Day1.html", game_list=game_list, space_reserved=space_reserved)
 
-@app.route('/add_player', methods=['POST', 'GET'])
+
 def add_player():
     data = request.get_json()
     game_id = data['id']
-    new_register = UserToGameId(id=game_id, user_id=session['user_id'])
-    db.query(UserToGameId).add(new_register)
-    db.session.commit()
+    user_id = session.get('user_id')
+
+    if not user_id:
+        return jsonify({"error": "Unauthorized"}), 401
+
+    new_register = UserToGameId(game_id=game_id, user_id=user_id)
+
+    try:
+        db.session.add(new_register)
+        db.session.commit()
+        return jsonify({"message": "Successfully registered!"}), 200
+
+    # Now IntegrityError is properly imported and recognized
+    except IntegrityError:
+        db.session.rollback()
+        logging.info("Duplicate game registration attempted")
+        return jsonify({"error": "Already registered for this game"}), 400
+
+    except Exception as e:
+        db.session.rollback()
+        logging.error(f"Error: {str(e)}")
+        return jsonify({"error": "Server error"}), 500
 @app.route('/Day2', methods=['POST', 'GET'])
 def day2():
     return render_template("Day2.html")
@@ -115,7 +134,7 @@ def login():
         else:
             return redirect("login", 404, "用户名错误")
     return render_template("Sign in.html")
-
+    #return render_template("index.html")
 
 @app.route('/logout')
 def logout():
