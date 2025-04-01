@@ -1,6 +1,6 @@
 import json
 import logging
-from flask import Flask, render_template, url_for, request, session, redirect
+from flask import Flask, render_template, url_for, request, session, redirect, jsonify
 from sqlalchemy.exc import SQLAlchemyError
 from database import db, User, Game, UserToGameId
 from sqlalchemy.exc import IntegrityError

@@ -82,7 +82,7 @@ class User(db.Model):
 
 
 class UserToGameId(db.Model):
-    __tablename__ = 'Resgister'
+    __tablename__ = 'Register'
     user_id = db.Column(db.Integer, db.ForeignKey('UserInfo.phone'), primary_key=True)
     game_id = db.Column(db.Integer, db.ForeignKey('GameInfo.id'), primary_key=True)
 
