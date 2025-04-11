@@ -6,10 +6,6 @@
 {% block body %}
     <h1>Day1 团表</h1>
 
-    <a href="{{ url_for('logout') }}">
-     <button style="position: absolute; top: 10px; right: 10px;">登出</button>
-    </a>
-
     <ul>
       {% for game in game_list %}
       <li>
@@ -28,6 +24,10 @@
           data-logged-in="{{ 'user_id' in session }}"
           data-game-id="{{ game.id }}"
           data-qr="{{ game.QR_code }}">加入</button>
+
+        <button
+            onclick="handleQuit(this)"
+            data-game-id="{{ game.id }}">退出</button>
 
         <div class="overlay" id="overlay"></div>
         <div class="popup" id="popup-content">
@@ -64,8 +64,10 @@
             inner.innerHTML = `<p>人数已满</p>`;
           } else {
             inner.innerHTML = `
-              <p>请先登录</p>
-              <a href="/login"><button type="button">登录</button></a>
+                <p>请先登录</p>
+                <a href="/login?next=${window.location.pathname}">
+                    <button type="button">登录</button>
+                </a>
             `;
           }
         }
@@ -129,6 +131,55 @@
                     }
                 });
         }
+        function handleLogout() {
+            fetch('/logout')
+                .then(res => res.json())
+                .then(data => {
+                    const overlay = document.getElementById('overlay');
+                    const popup = document.getElementById('popup-content');
+                    const inner = document.getElementById('popup-inner');
+
+                    overlay.style.display = 'block';
+                    popup.style.display = 'block';
+                    inner.innerHTML = `
+                        <p style="color: green;">${data.message}</p>
+                    `;
+                })
+                .catch(error => {
+                    console.error('Logout failed:', error);
+                });
+        }
+
+        function handleQuit(button) {
+            const gameId = button.dataset.gameId;
+
+            fetch('/remove_player', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({id: gameId})
+            })
+                .then(res => res.json())
+                .then(data => {
+                    const overlay = document.getElementById('overlay');
+                    const popup = document.getElementById('popup-content');
+                    const inner = document.getElementById('popup-inner');
+
+                    overlay.style.display = 'block';
+                    popup.style.display = 'block';
+
+                    if (data.message) {
+                        inner.innerHTML = `<p style="color: green;">${data.message}</p>`;
+                    } else if (data.error) {
+                        inner.innerHTML = `<p style="color: red;">${data.error}</p>`;
+                    }
+                })
+                .catch(err => {
+                    console.error('退出失败:', err);
+                });
+        }
+
     </script>
     <style>
         .overlay {
@@ -151,10 +202,10 @@
             border-radius: 10px;
             z-index: 1001;
         }
-    <div style="text-align: center; margin-top: 50px;">
-      <a href="{{ url_for('logout') }}">
-        <button style="padding: 10px 20px; font-size: 16px;">退出登录</button>
-      </a>
+    </style>
+
+    <div style="position: fixed; top: 20px; right: 20px; z-index: 1002;">
+      <button class="logout-button" onclick="handleLogout()">退出登录</button>
     </div>
 
 {% endblock %}

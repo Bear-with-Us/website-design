@@ -87,7 +87,7 @@ def add_player():
     user_id = session.get('user_id')
 
     if not user_id:
-        return jsonify({"error": "Unauthorized"}), 401
+        return jsonify({"error": "没有登陆呢喵╮(￣▽ ￣)╭刷新一下喵"}), 401
 
     new_register = UserToGameId(game_id=game_id, user_id=user_id)
 
@@ -106,6 +106,28 @@ def add_player():
         db.session.rollback()
         logging.error(f"Error: {str(e)}")
         return jsonify({"error": "服务器没连上喵╥﹏╥..."}), 500
+
+@app.route('/remove_player', methods=['POST'])
+def remove_player():
+    data = request.get_json()
+    game_id = data['id']
+    user_id = session.get('user_id')
+
+    if not user_id:
+        return jsonify({"error": "未登录，无法退出喵( •̀ ω •́ )✧刷新一下喵"}), 401
+
+    try:
+        entry = UserToGameId.query.filter_by(game_id=game_id, user_id=user_id).first()
+        if entry:
+            db.session.delete(entry)
+            db.session.commit()
+            return jsonify({"message": "已成功退出该团喵~┗( T﹏T )┛"}), 200
+        else:
+            return jsonify({"error": "你还没有加入这个团喵ฅ(＾・ω・＾ฅ)"}), 400
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({"error": "服务器错误喵(╥﹏╥)"}), 500
+
 @app.route('/Day2', methods=['POST', 'GET'])
 def day2():
     return render_template("Day2.html")
@@ -113,32 +135,35 @@ def day2():
 
 @app.route('/login', methods=['POST', 'GET'])
 def login():
+    next_page = request.args.get('next')  # <-- track original destination
+
     if 'user_id' in session:
-        return render_template("index.html")
+        return redirect(next_page or url_for('home'))  # Go to original or home
 
     if request.method == 'POST':
         username = request.form.get('username')
         password = request.form.get('password')
+
         if username == "123" and password == "123":
-            return redirect("admin")
+            session['user_id'] = username
+            return redirect(next_page or url_for('admin'))
+
         if User.exist(username):
             if User.isCorrect(username=username, password=password):
                 session['user_id'] = username
-                return render_template("index.html")
+                return redirect(next_page or url_for('home'))
             else:
-                return redirect('login', 401, "密码错误")
+                return redirect(url_for('login', next=next_page))
         else:
-            return redirect("login", 404, "用户名错误")
-    return render_template("Sign in.html")
-    #return render_template("index.html")
+            return redirect(url_for('login', next=next_page))
 
-@app.route('/logout')
+    return render_template("Sign in.html")
+
+@app.route('/logout', methods=['GET'])
 def logout():
-    # Clear user session
     session.pop('user_id', None)
     session.pop('username', None)
-    return redirect(url_for('login'))
-
+    return jsonify({'message': '登出了喵！(o゜▽゜)o☆[BINGO!]'})
 
 if __name__ == "__main__":
     with app.app_context():

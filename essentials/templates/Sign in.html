@@ -9,7 +9,7 @@
 
 <div class = "login-wrapper">
     <h1 class="login-title">登录</h1>
-    <form method="POST" action="{{ url_for('login') }}">
+    <form method="POST" action="{{ url_for('login', next=request.args.get('next')) }}">
         <div class = "form-row">
             <label for="username">账号:</label>
             <input type="text" id="username" name="username" required>
