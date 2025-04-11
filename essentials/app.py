@@ -22,12 +22,7 @@ def initialise_db():
 def home():
     # If user is logged in, greet them; otherwise prompt to log in
     # session is a dictionary containing all information stored by the current user
-    if 'user_id' in session:
-        return render_template("index.html")
-    else:
-        return redirect(url_for('login'))
-
-
+    return render_template("index.html")
 
 @app.route('/admin', methods=['POST', 'GET'])
 def admin():
