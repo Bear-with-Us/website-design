@@ -85,6 +85,7 @@ def day1():
     return render_template("Day1.html", game_list=game_list, space_reserved=space_reserved)
 
 
+@app.route('/add_player', methods=['POST'])
 def add_player():
     data = request.get_json()
     game_id = data['id']
@@ -98,18 +99,18 @@ def add_player():
     try:
         db.session.add(new_register)
         db.session.commit()
-        return jsonify({"message": "Successfully registered!"}), 200
+        return jsonify({"message": "成功加入喵!φ(≧ω≦*)♪"}), 200
 
     # Now IntegrityError is properly imported and recognized
     except IntegrityError:
         db.session.rollback()
         logging.info("Duplicate game registration attempted")
-        return jsonify({"error": "Already registered for this game"}), 400
+        return jsonify({"error": "已经成功了喵！ヾ(≧∇≦*)ゝ"}), 400
 
     except Exception as e:
         db.session.rollback()
         logging.error(f"Error: {str(e)}")
-        return jsonify({"error": "Server error"}), 500
+        return jsonify({"error": "服务器没连上喵╥﹏╥..."}), 500
 @app.route('/Day2', methods=['POST', 'GET'])
 def day2():
     return render_template("Day2.html")

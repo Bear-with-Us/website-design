@@ -115,10 +115,15 @@
                     id: gameId
                 })
             })
-            .then(res => res.json())
-            .then(data => {
-                console.log('Backend response:', data);
-            });
-    }
+                .then(res => res.json())
+                .then(data => {
+                    const inner = document.getElementById('popup-inner');
+                    if (data.message) {
+                        inner.innerHTML = `<p style="color: green;">${data.message}</p>`;
+                    } else if (data.error) {
+                        inner.innerHTML = `<p style="color: red;">${data.error}</p>`;
+                    }
+                });
+        }
     </script>
 {% endblock %}
