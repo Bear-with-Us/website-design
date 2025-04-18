@@ -1,18 +1,487 @@
 {% extends 'base.html' %}
 {% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
 <title>共振幻想 3.0</title>
 <h1>共振幻想 3.0</h1>
 {% endblock %}
 
 
 {% block body %}
+<nav class="navbar navbar-expand-lg navbar-light py-4 py-lg-0 fixed-top bg-white bg-opacity-75 border-bottom" style="">
+	<div class="container"><a class="navbar-brand font-serif text-uppercase h6 text-primary fw-bold mb-0">PC2·传送门跑团嘉年华2.0</a>
+		<button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+		<div class="collapse navbar-collapse" id="navbarSupportedContent">
+			<ul class="nav navbar-nav ms-auto mb-2 mb-lg-0">
+				<li class="nav-item"><a class="nav-link text-uppercase" href="#intro">TOP</a></li>
+				<!-- <li class="nav-item"><a class="nav-link text-uppercase" href="#about">活动详情</a></li> -->
+				<li class="nav-item"><a class="nav-link text-uppercase" href="#apply">报名</a></li>
+				<!-- <li class="nav-item"><a class="nav-link text-uppercase" href="#map">地图</a></li> -->
+				<li class="nav-item"><a class="nav-link text-uppercase text-primary" target="_blank" href="http://trpg.zzhai.top"><strong>宅爷的跑团工具箱</strong></a></li>
+			</ul>
+		</div>
+	</div>
+</nav>
+<!-- INTRO SECTION-->
+<section class="intro bg-cover bg-center d-flex align-items-center dark-overlay" id="intro">
+	<div class="parallax__container"><div class="parallax" style="background-image: url(&quot;../../image/bg.webp&quot;); height: 799.222px; top: -496.444px;"></div></div>
+	<div class="overlay-content text-white w-100">
+		<div class="container text-center">
+			<div class="row">
+				<div class="col-lg-11 mx-auto">
 
-<div class = "content">
-    <h1>请选择报名场次</h1>
-    <a href="{{ url_for('day1') }}">5月31号 </a>
-    <br>
-    <br>
-    <br>
-    <a href="{{ url_for('day2') }}"> 6月1号 </a>
+					<h1 class="intro-heading my-5 wow fadeInDown" data-wow-delay="0s" style="visibility: visible; animation-delay: 0s; animation-name: fadeInDown;"><img src="../../image/tt.webp" alt="title1" style="max-width: 100%;">
+					</h1>
+
+
+					<p class="h3 intro-text fw-normal wow fadeInUp" data-wow-delay="0.5s" style="visibility: visible; animation-delay: 0.5s; animation-name: fadeInUp;"><img src="../../image/骰子.webp" alt="title2" style="max-width: 100%;margin-top:-20%"></p>
+
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+<!--  /- END INTRO SECTION-->
+<!-- ABOUT SECTION -->
+<!-- <section id="about" class="bg-gray-800 text-white">
+	<div class="container">
+		<header class="mb-5 text-center">
+			<h2 class="heading">活动详情</h2>
+		</header>
+		<div class="row gy-4">
+			<div class="col-lg-6 wow fadeInUp" data-wow-delay="0s">
+				<p><strong>活动时间：</strong>2024年5月2日 10:00 - 22:00</p>
+				<p><strong>活动地点：</strong>重庆市渝中区印象城6Lcoptus卡普塔斯卡牌桌游体验馆（高德美团均可直接搜到）</p>
+				<p><strong>交通：</strong>
+				<ul>
+					<li>推荐：轨道九号线化龙桥站，地铁站在商场内部，可直接进入印象城4L</li>
+					<li>瑞天路·铭依眼科站（501路，261路，808路，503路，210路），步行436米至印象城</li>
+					<li>华村站（318路）步行558米至印象城</li>
+					<li>印象城停车位价格：<ul>
+							<li>4 RMB/H</li>
+							<li>15 RMB/12H</li>
+							<li>25 RMB/24H</li>
+						</ul>
+					</li>
+					<li>充电桩位置：B1,B2,B3的A区</li>
+				</ul>
+				</p>
+				<p><strong>主办方QQ：</strong>734222469</p>
+				<p><strong>主办方微信：</strong>734222469</p>
+			</div>
+			<div class="col-lg-3 col-md-6 wow fadeInUp text-center" data-wow-delay="0.1s">
+				<img src="img/qq.png" alt="QQ二维码" style="max-width: 100%;" />
+			</div>
+			<div class="col-lg-3 col-md-6 wow fadeInUp text-center" data-wow-delay="0.2s">
+				<img src="img/wechat.png" alt="微信二维码" style="max-width: 100%;" />
+			</div>
+		</div>
+	</div>
+</section> -->
+
+<!--Sponsorship-->
+<section class="bg-gray-800 text-white py-2">
+	<div class="container">
+		<header class="text-center">
+			<h2 class="heading">活动赞助商</h2>
+		</header>
+		<div class="row">
+			<div class="col-12 col-lg-6">
+				<div id="sponsor1" class="carousel slide pointer-event" data-bs-ride="carousel">
+					<div class="carousel-indicators">
+						<button type="button" data-bs-target="#sponsor1" data-bs-slide-to="0" class="" aria-label="Slide 1"></button>
+						<button type="button" data-bs-target="#sponsor1" data-bs-slide-to="1" aria-label="Slide 2" class=""></button>
+						<button type="button" data-bs-target="#sponsor1" data-bs-slide-to="2" aria-label="Slide 3" class="active" aria-current="true"></button>
+					</div>
+					<div class="carousel-inner">
+						<div class="carousel-item" data-bs-interval="3000">
+							<img src="image/广告/1-1.webp" class="d-block w-100" alt="银钥秘社">
+						</div>
+						<div class="carousel-item" data-bs-interval="3000">
+							<img src="image/广告/1-2.webp" class="d-block w-100" alt="银钥秘社">
+						</div>
+						<div class="carousel-item active" data-bs-interval="3000">
+							<img src="image/广告/1-3.webp" class="d-block w-100" alt="银钥秘社">
+						</div>
+					</div>
+					<button class="carousel-control-prev" type="button" data-bs-target="#sponsor1" data-bs-slide="prev">
+						<span class="carousel-control-prev-icon" aria-hidden="true"></span>
+						<span class="visually-hidden">Previous</span>
+					</button>
+					<button class="carousel-control-next" type="button" data-bs-target="#sponsor1" data-bs-slide="next">
+						<span class="carousel-control-next-icon" aria-hidden="true"></span>
+						<span class="visually-hidden">Next</span>
+					</button>
+				</div>
+			</div>
+			<div class="col-12 col-lg-6">
+				<div id="sponsor2" class="carousel slide pointer-event" data-bs-ride="carousel">
+					<div class="carousel-indicators">
+						<button type="button" data-bs-target="#sponsor2" data-bs-slide-to="0" class="" aria-label="Slide 1"></button>
+						<button type="button" data-bs-target="#sponsor2" data-bs-slide-to="1" aria-label="Slide 2" class="active" aria-current="true"></button>
+						<button type="button" data-bs-target="#sponsor2" data-bs-slide-to="2" aria-label="Slide 3" class=""></button>
+					</div>
+					<div class="carousel-inner">
+						<div class="carousel-item" data-bs-interval="3000">
+							<img src="image/广告/2-1.webp" class="d-block w-100" alt="吟游之歌">
+						</div>
+						<div class="carousel-item active" data-bs-interval="3000">
+							<img src="image/广告/2-2.webp" class="d-block w-100" alt="吟游之歌">
+						</div>
+						<div class="carousel-item" data-bs-interval="3000">
+							<img src="image/广告/2-3.webp" class="d-block w-100" alt="吟游之歌">
+						</div>
+					</div>
+					<button class="carousel-control-prev" type="button" data-bs-target="#sponsor2" data-bs-slide="prev">
+						<span class="carousel-control-prev-icon" aria-hidden="true"></span>
+						<span class="visually-hidden">Previous</span>
+					</button>
+					<button class="carousel-control-next" type="button" data-bs-target="#sponsor2" data-bs-slide="next">
+						<span class="carousel-control-next-icon" aria-hidden="true"></span>
+						<span class="visually-hidden">Next</span>
+					</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+
+
+<!-- display game list -->
+<section id="apply" style="background-color: var(--color-bg);">
+	<div class="container text-center">
+		<header class="mb-4">
+			<div class="row mb-4 wow fadeInUp" style="visibility: visible; animation-name: fadeInUp;">
+				<div class="col-lg-12 mx-auto">
+					<h2 class="heading">现场团报名</h2>
+				</div>
+				<form action="../../active/login" method="post">
+					<div id="logindiv" class="col-lg-6 mx-auto row">
+
+						<div class="col-lg-12 mx-auto text-gray-500">
+							本页面的登录信息与跑团工具箱不相通，活动结束后账户会注销
+						</div>
+						<div class="col-lg-5">
+							<input class="form-control" type="text" name="mobile" required="" placeholder="报名的手机号">
+						</div>
+						<div class="col-lg-5">
+							<input class="form-control" type="password" name="psw" required="" placeholder="密码（与手机号相同）">
+						</div>
+						<button class="btn btn-primary col-lg-2" type="submit">登录</button>
+
+					</div>
+				</form>
+			</div>
+			<!-- 团信息 -->
+
+			<p class="lead text-muted wow fadeInUp" data-wow-delay="0.1s" style="visibility: visible; animation-delay: 0.1s; animation-name: fadeInUp;">
+				<strong class="text-primary">活动报名时间：</strong>登录后查看
+			</p>
+
+			<p class="lead text-muted wow fadeInUp" data-wow-delay="0.2s" style="visibility: visible; animation-delay: 0.2s; animation-name: fadeInUp;">
+
+				<strong class="text-primary">可以取消</strong>报名改报其他团，报名截止后不可更改（如需修改请联系主办方）
+
+			</p>
+		</header>
+
+		<ul class="nav nav-tabs" id="myTab" role="tablist">
+
+			<!-- 如果玩家未登录或能报名该项 -->
+
+			<li class="nav-item me-3" role="presentation">
+				<button class="nav-link" id="17日团-tab" data-bs-toggle="tab" data-bs-target="#17日团" type="button" role="tab" aria-controls="17日团" aria-selected="false" tabindex="-1">17日团</button>
+			</li>
+
+
+			<!-- 如果玩家未登录或能报名该项 -->
+
+			<li class="nav-item me-3" role="presentation">
+				<button class="nav-link active" id="18日团-tab" data-bs-toggle="tab" data-bs-target="#18日团" type="button" role="tab" aria-controls="18日团" aria-selected="true">18日团</button>
+			</li>
+
+
+		</ul>
+		<div class="tab-content" id="myTabContent">
+
+			<div class="tab-pane fade" id="5月31日" role="tabpanel" aria-labelledby="Day1-tab">
+				<details style="text-align: left;" open="">
+					<summary style="line-height:3em;">上半场</summary>
+					<div class="row">
+						{% for game in day1_gamesA %}
+
+							<div class="equal-height h-auto mb-3 col-xl-6 bg-white p-4 position-relative">
+								<div class="row">
+									<div style="width: calc(100% - 140px);" class="position-relative">
+
+										<div class="text-lg position-absolute top-0 end-0 opacity-25 text-gray-500" id="ybm_7081" style="transform: rotate(20deg);display: none;">
+											<strong>已报名</strong>
+										</div>
+
+										<p class="mb-2 text-gray-500 text-start">
+											<strong style="font-size: 1.5rem;" class="text-primary">【{{ game.rule }}】{{ game.name }}</strong><br>
+											<strong>主持：</strong>{{ game.kp }}<br>
+											<strong>场次：</strong>上半场<br>
+										</p>
+										<p class="mb-0 text-gray-500 text-start">剩余空位：<strong class="text-primary text-lg">{{ game.max_pl-space_reserved[game.id] }}</strong>
+										</p>
+										<div class="position-absolute bottom-0 end-0"><button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#7081">详情</button></div>
+									</div>
+
+									<div class="overflow-hidden" style="width: 140px; height: 180px;">
+										<img src="{{ url_for('image', game.theme) }}" alt="" class="h-100 w-100 object-fit-cover">
+									</div>
+								</div>
+							</div>
+							<div class="modal fade text-start" id="{{ game.id }}" tabindex="-1" aria-labelledby="myModalLabel" style="display: none;" aria-hidden="true">
+								<div class="modal-dialog">
+									<div class="modal-content">
+										<div class="modal-header">
+											<h5 class="modal-title" id="myModalLabel">{{ game.name }}</h5>
+											<button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+										</div>
+										<div class="card-body p-4">
+											<strong>规则：</strong><br>{{ game.rule }}<br><br>
+											<strong>背景介绍：</strong><br>{{ game.description }}<br><br>
+											<strong>QQ：</strong>{{ game.qq }}<br><br>
+											<strong>跑团桌位：</strong>{{ game.table }}
+										</div>
+									</div>
+								</div>
+							</div>
+						{% end for %}
+					</div>
+				</details>
+				<details style="text-align: left;" open="">
+					<summary style="line-height:3em;">下半场</summary>
+					<div class="row">
+						{% for game in day1_gamesB %}
+
+							<div class="equal-height h-auto mb-3 col-xl-6 bg-white p-4 position-relative">
+								<div class="row">
+									<div style="width: calc(100% - 140px);" class="position-relative">
+
+										<div class="text-lg position-absolute top-0 end-0 opacity-25 text-gray-500" id="ybm_7081" style="transform: rotate(20deg);display: none;">
+											<strong>已报名</strong>
+										</div>
+
+										<p class="mb-2 text-gray-500 text-start">
+											<strong style="font-size: 1.5rem;" class="text-primary">【{{ game.rule }}】{{ game.name }}</strong><br>
+											<strong>主持：</strong>{{ game.kp }}<br>
+											<strong>场次：</strong>下半场<br>
+										</p>
+										<p class="mb-0 text-gray-500 text-start">剩余空位：<strong class="text-primary text-lg">{{ game.max_pl-space_reserved[game.id] }}</strong>
+										</p>
+										<div class="position-absolute bottom-0 end-0"><button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#7081">详情</button></div>
+									</div>
+
+									<div class="overflow-hidden" style="width: 140px; height: 180px;">
+										<img src="{{ url_for('image', game.theme) }}" alt="" class="h-100 w-100 object-fit-cover">
+									</div>
+								</div>
+							</div>
+							<div class="modal fade text-start" id="{{ game.id }}" tabindex="-1" aria-labelledby="myModalLabel" style="display: none;" aria-hidden="true">
+								<div class="modal-dialog">
+									<div class="modal-content">
+										<div class="modal-header">
+											<h5 class="modal-title" id="myModalLabel">{{ game.name }}</h5>
+											<button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+										</div>
+										<div class="card-body p-4">
+											<strong>规则：</strong><br>{{ game.rule }}<br><br>
+											<strong>背景介绍：</strong><br>{{ game.description }}<br><br>
+											<strong>QQ：</strong>{{ game.qq }}<br><br>
+											<strong>跑团桌位：</strong>{{ game.table }}
+										</div>
+									</div>
+								</div>
+							</div>
+						{% end for %}
+					</div>
+				</details>
+			</div>
+			<div class="tab-pane fade active show" id="6月1日" role="tabpanel" aria-labelledby="Day2-tab">
+				<details style="text-align: left;" open="">
+					<summary style="line-height:3em;">{{ game.session }}</summary>
+					<div class="row">
+						{% for game in day2_gamesA %}
+
+							<div class="equal-height h-auto mb-3 col-xl-6 bg-white p-4 position-relative">
+								<div class="row">
+									<div style="width: calc(100% - 140px);" class="position-relative">
+
+										<div class="text-lg position-absolute top-0 end-0 opacity-25 text-gray-500" id="ybm_7081" style="transform: rotate(20deg);display: none;">
+											<strong>已报名</strong>
+										</div>
+
+										<p class="mb-2 text-gray-500 text-start">
+											<strong style="font-size: 1.5rem;" class="text-primary">【{{ game.rule }}】{{ game.name }}</strong><br>
+											<strong>主持：</strong>{{ game.kp }}<br>
+											<strong>场次：</strong>上半场<br>
+										</p>
+										<p class="mb-0 text-gray-500 text-start">剩余空位：<strong class="text-primary text-lg">{{ game.max_pl-space_reserved[game.id] }}</strong>
+										</p>
+										<div class="position-absolute bottom-0 end-0"><button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#7081">详情</button></div>
+									</div>
+
+									<div class="overflow-hidden" style="width: 140px; height: 180px;">
+										<img src="{{ url_for('image', game.theme) }}" alt="" class="h-100 w-100 object-fit-cover">
+									</div>
+								</div>
+							</div>
+							<div class="modal fade text-start" id="7081" tabindex="-1" aria-labelledby="myModalLabel" style="display: none;" aria-hidden="true">
+								<div class="modal-dialog">
+									<div class="modal-content">
+										<div class="modal-header">
+											<h5 class="modal-title" id="myModalLabel">{{ game.name }}</h5>
+											<button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+										</div>
+										<div class="card-body p-4">
+											<strong>规则：</strong><br>{{ game.rule }}<br><br>
+											<strong>背景介绍：</strong><br>{{ game.description }}<br><br>
+											<strong>QQ：</strong>{{ game.qq }}<br><br>
+											<strong>跑团桌位：</strong>{{ game.table }}
+										</div>
+									</div>
+								</div>
+							</div>
+						{% end for %}
+					</div>
+				</details>
+			</div>
+
+		</div>
+	</div>
+</section>
+
+
+<!-- <div id="map">
+	<iframe frameborder="0" width="100%" height="100%" style="border: 0;"
+		src="http://apis.map.qq.com/tools/poimarker?type=0&marker=coord:29.550457,106.51751;title:幻想共振-Coptus;addr:重庆化龙桥印象城六楼Coptus|coord:29.550457,106.517512&key=OB4BZ-D4W3U-B7VVO-4PJWW-6TKDJ-WPB77&referer=myapp"></iframe>
+</div> -->
+<footer class="py-5 bg-dark text-light">
+	<div class="container py-3">
+		<div class="row gy-3 mb-4 text-center align-items-center">
+			<div class="col-md-6 text-lg-start">
+				<!-- <ul class="list-inline">
+					<li class="list-inline-item"><a class="social-link facebook" href="#"> <i
+								class="fab fa-facebook-f"></i></a></li>
+					<li class="list-inline-item"><a class="social-link instagram" href="#"> <i
+								class="fab fa-instagram"></i></a></li>
+					<li class="list-inline-item"><a class="social-link pinterest" href="#"> <i
+								class="fab fa-pinterest"></i></a></li>
+					<li class="list-inline-item"><a class="social-link email" href="#"> <i
+								class="fas fa-envelope"></i></a></li>
+				</ul> -->
+			</div>
+			<div class="col-md-6 text-lg-end">
+				<p class="mb-0 font-serif text-sm">© 2024 宅爷的跑团工具箱<br>
+					<a target="_blank" href="https://beian.miit.gov.cn/#/Integrated/index">
+						京ICP备2024052147</a>
+				</p>
+			</div>
+		</div>
+	</div>
+</footer>
+<!-- 通知 -->
+<div class="toast-container position-fixed top-0 end-0 p-4">
+	<div class="toast fade hide" role="alert" aria-live="assertive" aria-atomic="true" id="msgbox">
+		<div class="toast-header"><strong class="me-auto">提示</strong><!-- <small>11 mins ago</small> -->
+			<button class="btn-close" type="button" data-bs-dismiss="toast" aria-label="Close"></button>
+		</div>
+		<div class="toast-body">密码错误！</div>
+	</div>
 </div>
+
+
+<script src="../js/home-premium.js"> </script>
+<!-- JavaScript files-->
+<script src="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/5.3.1/js/bootstrap.bundle.min.js"></script>
+<!-- <script src="vendor/swiper/swiper-bundle.min.js"></script> -->
+<!-- <script src="vendor/waypoints/lib/noframework.waypoints.min.js"></script> -->
+<script src="vendor/universal-parallax/universal-parallax.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/wow/1.1.2/wow.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/countup.js/1.8.2/countUp.min.js"></script>
+<script src="js/theme.js"></script>
+
+<script>
+	function baoming(e, id) {
+		var url = e.href;
+
+		function a() {
+			document.getElementById("bm_" + id).children[0].style.display = 'block';
+			document.getElementById("bm_" + id).children[1].style.display = 'none';
+			document.getElementById("ybm_" + id).style.display = 'block';
+		}
+		var ss = post(e, a);
+	}
+
+	function quxiaobaoming(e, id) {
+		var url = e.href;
+
+		function a() {
+			document.getElementById("bm_" + id).children[1].style.display = 'block';
+			document.getElementById("bm_" + id).children[0].style.display = 'none';
+			document.getElementById("ybm_" + id).style.display = 'none';
+		}
+		var ss = post(e, a);
+	}
+	// post请求+msg
+	function post(e, func1 = null, func2 = null) {
+		var url = e.href;
+		// 发送post
+		var xhr = new XMLHttpRequest();
+		xhr.open("POST", url, true);
+		xhr.setRequestHeader("Content-Type", "application/json");
+		xhr.send();
+		xhr.onreadystatechange = function() {
+			if (xhr.readyState == 4 && xhr.status == 200) {
+				var msg = JSON.parse(xhr.responseText);
+				if (msg[0]) {
+					creatMsg("成功", msg[1], "success");
+					if (func1) func1();
+					return true;
+				} else {
+					creatMsg("错误", msg[1], "danger");
+					if (func2) func2();
+					return false;
+				}
+			} else {
+				creatMsg("提示", "与服务器通信发生错误", "warning");
+				return false;
+			}
+		};
+	}
+
+	// 创建通知信息
+	function creatMsg(title, text, type = null) {
+		msgbox.children[0].children[0].innerText = title;
+		msgbox.children[1].innerText = text;
+		// 移除组
+		msgbox.classList.remove("bg-danger", "bg-success", "bg-warning", "text-white");
+		// 添加组
+		if (type == "success") {
+			msgbox.classList.add("bg-success", "text-white");
+		} else
+		if (type == "danger") {
+			msgbox.classList.add("bg-danger", "text-white");
+		} else
+		if (type == "warning") {
+			msgbox.classList.add("bg-warning", "text-white");
+		}
+		var toastElList = [].slice.call(document.querySelectorAll('.toast'))
+		var toastList = toastElList.map(function(toastEl) {
+			return new bootstrap.Toast(toastEl)
+		})
+		toastList.forEach(toast => toast.show())
+	}
+	// 为了使网页不报错
+	function Swiper() {}
+
+	function mixitup() {}
+
+	function Waypoint() {}
+</script>
+<!-- FontAwesome CSS - loading as last, so it doesn't block rendering-->
+<!-- <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css"
+	integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous"> -->
 {% endblock %}

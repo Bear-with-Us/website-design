@@ -22,7 +22,16 @@ def initialise_db():
 def home():
     # If user is logged in, greet them; otherwise prompt to log in
     # session is a dictionary containing all information stored by the current user
-    return render_template("index.html")
+    urls = [f"static/banner/image{i}.png" for i in range(1, 4)]
+    day1_gamesA = Game.query.filter_by(type='Day1', session='A').all()
+    day2_gamesA = Game.query.filter_by(type='Day2', session='A').all()
+    day1_gamesB = Game.query.filter_by(type='Day1', session='B').all()
+    day2_gamesB = Game.query.filter_by(type='Day2', session='B').all()
+    game_list = Game.query.all()
+    space_reserved = {}
+    for game in game_list:
+        space_reserved[game.id] = db.session.query(UserToGameId).filter_by(game_id=game.id).count()
+    return render_template("index.html", urls=urls, day1_gamesA=day1_gamesA, day2_gamesA=day2_gamesA,day1_gamesB=day1_gamesB, day2_gamesB=day2_gamesB, space_reserved=space_reserved)
 
 @app.route('/admin', methods=['POST', 'GET'])
 def admin():
@@ -144,7 +153,7 @@ def login():
         username = request.form.get('username')
         password = request.form.get('password')
 
-        if username == "123" and password == "123":
+        if username == "space.bilibili.com/20611741?spm_id_from=333.1387.follow.user_card.click" and password == "20611741":
             session['user_id'] = username
             return redirect(next_page or url_for('admin'))
 

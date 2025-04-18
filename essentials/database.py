@@ -6,14 +6,17 @@ db = SQLAlchemy()
 
 class Game(db.Model):
     __tablename__ = 'GameInfo'
-    id = db.Column(db.Text, primary_key=True)
+    id = db.Column(db.String(10), primary_key=True)
     name = db.Column(db.Text, nullable=False)
     kp = db.Column(db.Text, nullable=False)
     type = db.Column(db.String(10), nullable=False)
     time = db.Column(db.DateTime, nullable=False)
+    session = db.Column(db.String(1), nullable=False)
     rule = db.Column(db.Text, nullable=False)
     description = db.Column(db.Text)
-    QR_code = db.Column(db.Text)
+    qq = db.Column(db.String(30))
+    theme = db.Column(db.String(30))
+    table = db.Column(db.String(5))
     max_pl = db.Column(db.Integer, nullable=False)
 
     @staticmethod
@@ -93,3 +96,9 @@ class UserToGameId(db.Model):
     @staticmethod
     def getGamesViaPlayer(user: int) -> list:
         return [player[0] for player in db.session.query(UserToGameId).filter_by(user_id=user).all()]
+
+
+class Sponsor(db.Model):
+    __tablename__ = 'Sponsor'
+    id = db.Column(db.String(10), primary_key=True)
+    advert_urls = db.Column(db.String(30), nullable=True)

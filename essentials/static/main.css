@@ -1,15 +1,35 @@
 body {
-    mergin: 0;
+
     font-family: sans-serif;
 }
-.center-table {
-   margin: 0 auto;
-}
-.overlay {
-    display: none; /* hidden initially */
-    position: fixed;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    background-color: rgba(0,0,0,0.5); /* semi-transparent black */
+.banner-wrapper {
+  width: 50vw;                  /* 90% of the viewport width */
+  max-width: 100px;             /* Don't go bigger than 500px on large screens */
+  aspect-ratio: 1 / 1;          /* Maintains a square shape */
+  margin: 0 auto;               /* Center horizontally */
+  overflow: hidden;
+  position: relative;
+  background-color: #f5f5f5;    /* Optional background */
+  border-radius: 10px;          /* Optional rounded corners */
 }
 
+.banner-container {
+  width: 50%;
+  height: 50%;
+  position: relative;
+}
+
+.banner-image {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;           /* Scales image without cropping */
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0;
+  transition: opacity 0.5s ease-in-out;
+}
+
+.banner-image.active {
+  opacity: 1;
+}
