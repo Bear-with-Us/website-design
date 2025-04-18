@@ -38,11 +38,15 @@ class User(db.Model):
     phone = db.Column(db.Integer, primary_key=True)
     password = db.Column(db.Text, nullable=False)
     group = db.Column(db.Integer)
-
+    date = db.Column(db.String(5))
     @staticmethod
     def fetchAllPhone() -> list:
         phones = db.session.query(User.phone).all()
         return [phone[0] for phone in phones]
+
+    @staticmethod
+    def getDate(user: int) -> str:
+        return db.session.get(User, user).date
 
     @staticmethod
     def exist(name) -> bool:

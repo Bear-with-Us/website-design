@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='login.css') }}">
+<title>登录</title>
+{% endblock %}
+
+{% block body %}
+
+<div class = "login-wrapper">
+    <h1 class="login-title">登录</h1>
+    <form method="POST" action="{{ url_for('login', next=request.args.get('next')) }}">
+        <div class = "form-row">
+            <label for="username">账号:</label>
+            <input type="text" id="username" name="username" required>
+        </div>
+        <br><br>
+        <div class = "form-row">
+            <label for="password">密码:</label>
+            <input type="password" id="password" name="password" required>
+            <br><br>
+        </div>
+        <button type="submit" calss="login-button">登录</button>
+    </form>
+</div>
+
+{% endblock %}

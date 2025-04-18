@@ -16,14 +16,14 @@
 				<!-- <li class="nav-item"><a class="nav-link text-uppercase" href="#about">活动详情</a></li> -->
 				<li class="nav-item"><a class="nav-link text-uppercase" href="#apply">报名</a></li>
 				<!-- <li class="nav-item"><a class="nav-link text-uppercase" href="#map">地图</a></li> -->
-				<li class="nav-item"><a class="nav-link text-uppercase text-primary" target="_blank" href="http://trpg.zzhai.top"><strong>宅爷的跑团工具箱</strong></a></li>
+				</li>
 			</ul>
 		</div>
 	</div>
 </nav>
 <!-- INTRO SECTION-->
 <section class="intro bg-cover bg-center d-flex align-items-center dark-overlay" id="intro">
-	<div class="parallax__container"><div class="parallax" style="background-image: url(&quot;../../image/bg.webp&quot;); height: 799.222px; top: -496.444px;"></div></div>
+	<div class="parallax" style="background-image: url('{{ url_for('static', filename='image/bg.webp') }}'); height: 799.222px; top: -496.444px;"></div>
 	<div class="overlay-content text-white w-100">
 		<div class="container text-center">
 			<div class="row">
@@ -149,54 +149,21 @@
 <!-- display game list -->
 <section id="apply" style="background-color: var(--color-bg);">
 	<div class="container text-center">
-		<header class="mb-4">
-			<div class="row mb-4 wow fadeInUp" style="visibility: visible; animation-name: fadeInUp;">
-				<div class="col-lg-12 mx-auto">
-					<h2 class="heading">现场团报名</h2>
-				</div>
-				<form action="../../active/login" method="post">
-					<div id="logindiv" class="col-lg-6 mx-auto row">
-
-						<div class="col-lg-12 mx-auto text-gray-500">
-							本页面的登录信息与跑团工具箱不相通，活动结束后账户会注销
-						</div>
-						<div class="col-lg-5">
-							<input class="form-control" type="text" name="mobile" required="" placeholder="报名的手机号">
-						</div>
-						<div class="col-lg-5">
-							<input class="form-control" type="password" name="psw" required="" placeholder="密码（与手机号相同）">
-						</div>
-						<button class="btn btn-primary col-lg-2" type="submit">登录</button>
-
-					</div>
-				</form>
-			</div>
-			<!-- 团信息 -->
-
-			<p class="lead text-muted wow fadeInUp" data-wow-delay="0.1s" style="visibility: visible; animation-delay: 0.1s; animation-name: fadeInUp;">
-				<strong class="text-primary">活动报名时间：</strong>登录后查看
-			</p>
-
-			<p class="lead text-muted wow fadeInUp" data-wow-delay="0.2s" style="visibility: visible; animation-delay: 0.2s; animation-name: fadeInUp;">
-
-				<strong class="text-primary">可以取消</strong>报名改报其他团，报名截止后不可更改（如需修改请联系主办方）
-
-			</p>
-		</header>
+		<div id="dynamic-content">Loading...</div>
 
 		<ul class="nav nav-tabs" id="myTab" role="tablist">
 
 			<!-- 如果玩家未登录或能报名该项 -->
 
 			<li class="nav-item me-3" role="presentation">
-				<button class="nav-link" id="17日团-tab" data-bs-toggle="tab" data-bs-target="#17日团" type="button" role="tab" aria-controls="17日团" aria-selected="false" tabindex="-1">17日团</button>
+				<button class="nav-link" id="31日团-tab" data-bs-toggle="tab" data-bs-target="#31日团" type="button" role="tab" aria-controls="17日团" aria-selected="false" tabindex="-1">17日团</button>
 			</li>
 
 
 			<!-- 如果玩家未登录或能报名该项 -->
 
 			<li class="nav-item me-3" role="presentation">
-				<button class="nav-link active" id="18日团-tab" data-bs-toggle="tab" data-bs-target="#18日团" type="button" role="tab" aria-controls="18日团" aria-selected="true">18日团</button>
+				<button class="nav-link active" id="1日团-tab" data-bs-toggle="tab" data-bs-target="#1日团" type="button" role="tab" aria-controls="18日团" aria-selected="true">18日团</button>
 			</li>
 
 
@@ -213,7 +180,7 @@
 								<div class="row">
 									<div style="width: calc(100% - 140px);" class="position-relative">
 
-										<div class="text-lg position-absolute top-0 end-0 opacity-25 text-gray-500" id="ybm_7081" style="transform: rotate(20deg);display: none;">
+										<div class="text-lg position-absolute top-0 end-0 opacity-25 text-gray-500" id="signed_{{ game.id }}" style="transform: rotate(20deg);display: none;">
 											<strong>已报名</strong>
 										</div>
 
@@ -245,22 +212,32 @@
 											<strong>QQ：</strong>{{ game.qq }}<br><br>
 											<strong>跑团桌位：</strong>{{ game.table }}
 										</div>
+										<div class="modal-footer">
+											{% if game.id in enrolled_games %}
+											<a class="btn btn-primary" style="display: block;" href="{{ url_for('/remove_player', game_id=game.id) }}">取消报名</a>
+
+											<a class="btn btn-primary" style="display: none;" href="{{ url_for('/add_player', game_id=game.id) }}">报名</a>
+											{% else %}
+											<a class="btn btn-primary" style="display: none;" href="{{ url_for('/remove_player', game_id=game.id) }}">取消报名</a>
+
+											<a class="btn btn-primary" style="display: block;" href="{{ url_for('/add_player', game_id=game.id) }}">报名</a>
+											{% endif %}
+										</div>
 									</div>
 								</div>
 							</div>
-						{% end for %}
+						{% endfor %}
 					</div>
 				</details>
 				<details style="text-align: left;" open="">
 					<summary style="line-height:3em;">下半场</summary>
 					<div class="row">
 						{% for game in day1_gamesB %}
-
 							<div class="equal-height h-auto mb-3 col-xl-6 bg-white p-4 position-relative">
 								<div class="row">
 									<div style="width: calc(100% - 140px);" class="position-relative">
 
-										<div class="text-lg position-absolute top-0 end-0 opacity-25 text-gray-500" id="ybm_7081" style="transform: rotate(20deg);display: none;">
+										<div class="text-lg position-absolute top-0 end-0 opacity-25 text-gray-500" id="signed_{{ game.id }}" style="transform: rotate(20deg);display: none;">
 											<strong>已报名</strong>
 										</div>
 
@@ -292,16 +269,30 @@
 											<strong>QQ：</strong>{{ game.qq }}<br><br>
 											<strong>跑团桌位：</strong>{{ game.table }}
 										</div>
+										<div class="modal-footer">
+											{% if game.id in enrolled_games %}
+											<a class="btn btn-primary" style="display: block;" href="{{ url_for('/remove_player', game_id=game.id) }}">取消报名</a>
+
+											<a class="btn btn-primary" style="display: none;" href="{{ url_for('/add_player', game_id=game.id) }}">报名</a>
+											{% else %}
+											<a class="btn btn-primary" style="display: none;" href="{{ url_for('/remove_player', game_id=game.id) }}">取消报名</a>
+
+											<a class="btn btn-primary" style="display: block;" href="{{ url_for('/add_player', game_id=game.id) }}">报名</a>
+											{% endif %}
+										</div>
 									</div>
+
 								</div>
 							</div>
-						{% end for %}
+						{% endfor %}
 					</div>
 				</details>
 			</div>
-			<div class="tab-pane fade active show" id="6月1日" role="tabpanel" aria-labelledby="Day2-tab">
+
+
+			<div class="tab-pane fade" id="6月1日" role="tabpanel" aria-labelledby="Day2-tab">
 				<details style="text-align: left;" open="">
-					<summary style="line-height:3em;">{{ game.session }}</summary>
+					<summary style="line-height:3em;">上半场</summary>
 					<div class="row">
 						{% for game in day2_gamesA %}
 
@@ -309,7 +300,7 @@
 								<div class="row">
 									<div style="width: calc(100% - 140px);" class="position-relative">
 
-										<div class="text-lg position-absolute top-0 end-0 opacity-25 text-gray-500" id="ybm_7081" style="transform: rotate(20deg);display: none;">
+										<div class="text-lg position-absolute top-0 end-0 opacity-25 text-gray-500" id="signed_{{ game.id }}" style="transform: rotate(20deg);display: none;">
 											<strong>已报名</strong>
 										</div>
 
@@ -341,10 +332,80 @@
 											<strong>QQ：</strong>{{ game.qq }}<br><br>
 											<strong>跑团桌位：</strong>{{ game.table }}
 										</div>
+										<div class="modal-footer">
+											{% if game.id in enrolled_games %}
+											<a class="btn btn-primary" style="display: block;" href="{{ url_for('/remove_player', game_id=game.id) }}">取消报名</a>
+
+											<a class="btn btn-primary" style="display: none;" href="{{ url_for('/add_player', game_id=game.id) }}">报名</a>
+											{% else %}
+											<a class="btn btn-primary" style="display: none;" href="{{ url_for('/remove_player', game_id=game.id) }}">取消报名</a>
+
+											<a class="btn btn-primary" style="display: block;" href="{{ url_for('/add_player', game_id=game.id) }}">报名</a>
+											{% endif %}
+										</div>
+									</div>
+
+								</div>
+							</div>
+						{% endfor %}
+					</div>
+				</details>
+				<details style="text-align: left;" open="">
+					<summary style="line-height:3em;">下半场</summary>
+					<div class="row">
+						{% for game in day2_gamesB %}
+
+							<div class="equal-height h-auto mb-3 col-xl-6 bg-white p-4 position-relative">
+								<div class="row">
+									<div style="width: calc(100% - 140px);" class="position-relative">
+
+										<div class="text-lg position-absolute top-0 end-0 opacity-25 text-gray-500" id="signed_{{ game.id }}" style="transform: rotate(20deg);display: none;">
+											<strong>已报名</strong>
+										</div>
+
+										<p class="mb-2 text-gray-500 text-start">
+											<strong style="font-size: 1.5rem;" class="text-primary">【{{ game.rule }}】{{ game.name }}</strong><br>
+											<strong>主持：</strong>{{ game.kp }}<br>
+											<strong>场次：</strong>上半场<br>
+										</p>
+										<p class="mb-0 text-gray-500 text-start">剩余空位：<strong class="text-primary text-lg">{{ game.max_pl-space_reserved[game.id] }}</strong>
+										</p>
+										<div class="position-absolute bottom-0 end-0"><button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#7081">详情</button></div>
+									</div>
+
+									<div class="overflow-hidden" style="width: 140px; height: 180px;">
+										<img src="{{ url_for('image', game.theme) }}" alt="" class="h-100 w-100 object-fit-cover">
 									</div>
 								</div>
 							</div>
-						{% end for %}
+							<div class="modal fade text-start" id="{{ game.id }}" tabindex="-1" aria-labelledby="myModalLabel" style="display: none;" aria-hidden="true">
+								<div class="modal-dialog">
+									<div class="modal-content">
+										<div class="modal-header">
+											<h5 class="modal-title" id="myModalLabel">{{ game.name }}</h5>
+											<button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+										</div>
+										<div class="card-body p-4">
+											<strong>规则：</strong><br>{{ game.rule }}<br><br>
+											<strong>背景介绍：</strong><br>{{ game.description }}<br><br>
+											<strong>QQ：</strong>{{ game.qq }}<br><br>
+											<strong>跑团桌位：</strong>{{ game.table }}
+										</div>
+										<div class="modal-footer">
+											{% if game.id in enrolled_games %}
+											<a class="btn btn-primary" style="display: block;" href="{{ url_for('/remove_player', game_id=game.id) }}">取消报名</a>
+
+											<a class="btn btn-primary" style="display: none;" href="{{ url_for('/add_player', game_id=game.id) }}">报名</a>
+											{% else %}
+											<a class="btn btn-primary" style="display: none;" href="{{ url_for('/remove_player', game_id=game.id) }}">取消报名</a>
+
+											<a class="btn btn-primary" style="display: block;" href="{{ url_for('/add_player', game_id=game.id) }}">报名</a>
+											{% endif %}
+										</div>
+									</div>
+								</div>
+							</div>
+						{% endfor %}
 					</div>
 				</details>
 			</div>
@@ -352,8 +413,6 @@
 		</div>
 	</div>
 </section>
-
-
 <!-- <div id="map">
 	<iframe frameborder="0" width="100%" height="100%" style="border: 0;"
 		src="http://apis.map.qq.com/tools/poimarker?type=0&marker=coord:29.550457,106.51751;title:幻想共振-Coptus;addr:重庆化龙桥印象城六楼Coptus|coord:29.550457,106.517512&key=OB4BZ-D4W3U-B7VVO-4PJWW-6TKDJ-WPB77&referer=myapp"></iframe>
@@ -373,12 +432,6 @@
 								class="fas fa-envelope"></i></a></li>
 				</ul> -->
 			</div>
-			<div class="col-md-6 text-lg-end">
-				<p class="mb-0 font-serif text-sm">© 2024 宅爷的跑团工具箱<br>
-					<a target="_blank" href="https://beian.miit.gov.cn/#/Integrated/index">
-						京ICP备2024052147</a>
-				</p>
-			</div>
 		</div>
 	</div>
 </footer>
@@ -396,35 +449,55 @@
 <script src="../js/home-premium.js"> </script>
 <!-- JavaScript files-->
 <script src="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/5.3.1/js/bootstrap.bundle.min.js"></script>
-<!-- <script src="vendor/swiper/swiper-bundle.min.js"></script> -->
-<!-- <script src="vendor/waypoints/lib/noframework.waypoints.min.js"></script> -->
-<script src="vendor/universal-parallax/universal-parallax.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/wow/1.1.2/wow.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/countup.js/1.8.2/countUp.min.js"></script>
-<script src="js/theme.js"></script>
+<script src="{{ url_for('static', filename='vendor/universal-parallax/universal-parallax.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/theme.js') }}"></script>
+
 
 <script>
-	function baoming(e, id) {
-		var url = e.href;
+	//dynamic changes with respect to login status
+	function loadBlock() {
+		fetch('/get_block')
+		.then(res => res.json())
+		.then(data => {
+		  	document.getElementById('dynamic-content').innerHTML = data.html;
+			const login_form = document.getElementById('login-form');
+			if (login_form) {
+				login_form.addEventListener('submit', (e) => {
+					e.preventDefault();
 
-		function a() {
-			document.getElementById("bm_" + id).children[0].style.display = 'block';
-			document.getElementById("bm_" + id).children[1].style.display = 'none';
-			document.getElementById("ybm_" + id).style.display = 'block';
-		}
-		var ss = post(e, a);
+					const username = document.getElementById('username').value;
+					const password = document.getElementById('password').value;
+					if (username && password) {
+						fetch('/login', {
+							method: 'POST',
+							body: JSON.stringify({username, password}),
+						})
+						.then(res => res.json())
+					  	.then(data => {
+							  if (data.success) {
+								loadBlock(); // Refresh the content for the logged-in view
+							} else {
+								alert('登录失败，请检查手机号和密码');
+							}
+						})
+					}
+				})
+			}
+		});
 	}
 
-	function quxiaobaoming(e, id) {
-		var url = e.href;
 
-		function a() {
-			document.getElementById("bm_" + id).children[1].style.display = 'block';
-			document.getElementById("bm_" + id).children[0].style.display = 'none';
-			document.getElementById("ybm_" + id).style.display = 'none';
-		}
-		var ss = post(e, a);
+
+	function logout() {
+		fetch('/logout', { method: 'POST' }).then(loadBlock);
 	}
+
+	window.onload = loadBlock;
+</script>
+
+<script>
 	// post请求+msg
 	function post(e, func1 = null, func2 = null) {
 		var url = e.href;
