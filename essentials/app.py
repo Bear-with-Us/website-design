@@ -144,10 +144,10 @@ def day2():
 
 @app.route('/login', methods=['POST', 'GET'])
 def login():
-    next_page = request.args.get('next')  # <-- track original destination
+    next_page = request.args.get('next')
 
     if 'user_id' in session:
-        return redirect(next_page or url_for('home'))  # Go to original or home
+        return redirect(next_page or url_for('home'))
 
     if request.method == 'POST':
         username = request.form.get('username')
@@ -162,11 +162,11 @@ def login():
                 session['user_id'] = username
                 return redirect(next_page or url_for('home'))
             else:
-                return redirect(url_for('login', next=next_page))
+                return redirect(url_for('home', error='wrong-password'))
         else:
-            return redirect(url_for('login', next=next_page))
+            return redirect(url_for('home', error='no-user'))
 
-    return render_template("Sign in.html")
+    return redirect(url_for('home'))  # ⬅️ now default GET just redirects to index
 
 @app.route('/logout', methods=['GET'])
 def logout():
