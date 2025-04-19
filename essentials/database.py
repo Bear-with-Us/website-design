@@ -9,14 +9,13 @@ class Game(db.Model):
     id = db.Column(db.String(10), primary_key=True)
     name = db.Column(db.Text, nullable=False)
     kp = db.Column(db.Text, nullable=False)
-    type = db.Column(db.String(10), nullable=False)
-    time = db.Column(db.DateTime, nullable=False)
-    session = db.Column(db.String(1), nullable=False)
+    date = db.Column(db.Integer, nullable=False) # 1 or 2
+    session = db.Column(db.String(1), nullable=False) #A 上半 or B 下半
     rule = db.Column(db.Text, nullable=False)
     description = db.Column(db.Text)
     qq = db.Column(db.String(30))
     theme = db.Column(db.String(30))
-    table = db.Column(db.String(5))
+    table = db.Column(db.String(5)) #
     max_pl = db.Column(db.Integer, nullable=False)
 
     @staticmethod
@@ -37,8 +36,9 @@ class User(db.Model):
     __tablename__ = 'UserInfo'
     phone = db.Column(db.Integer, primary_key=True)
     password = db.Column(db.Text, nullable=False)
-    group = db.Column(db.Integer)
-    date = db.Column(db.String(5))
+    group = db.Column(db.String(10)) #Normal, VIP
+    date = db.Column(db.Integer, nullable=False) # 0 or 1 or 2
+
     @staticmethod
     def fetchAllPhone() -> list:
         phones = db.session.query(User.phone).all()

@@ -22,10 +22,10 @@ def initialise_db():
 def home():
     # If user is logged in, greet them; otherwise prompt to log in
     # session is a dictionary containing all information stored by the current user
-    day1_gamesA = Game.query.filter_by(type='Day1', session='A').all()
-    day2_gamesA = Game.query.filter_by(type='Day2', session='A').all()
-    day1_gamesB = Game.query.filter_by(type='Day1', session='B').all()
-    day2_gamesB = Game.query.filter_by(type='Day2', session='B').all()
+    day1_gamesA = Game.query.filter_by(date=1, session='A').all()
+    day2_gamesA = Game.query.filter_by(date=2, session='A').all()
+    day1_gamesB = Game.query.filter_by(date=1, session='B').all()
+    day2_gamesB = Game.query.filter_by(date=2, session='B').all()
     game_list = Game.query.all()
     user_id = session.get('user_id')
     space_reserved = {}
@@ -93,15 +93,6 @@ def get_block():
         else:
             return jsonify({"html": render_template("VIP.html", user=user)})
     return jsonify({"html": render_template('guest.html')})
-@app.route('/Day1', methods=['POST', 'GET'])
-def day1():
-    game_list = Game.query.filter_by(type='Day2').all()
-    #game_list = db.query(Game).filter_by(type='Day1').all()
-    space_reserved = {}
-    for game in game_list:
-        space_reserved[game.id] = db.session.query(UserToGameId).filter_by(game_id=game.id).count()
-    logging.info(game_list)
-    return render_template("Day1.html", game_list=game_list, space_reserved=space_reserved)
 
 
 @app.route('/add_player', methods=['POST'])
@@ -111,9 +102,10 @@ def add_player():
 
     if not user_id:
         return jsonify({"error": "没有登陆呢喵╮(￣▽ ￣)╭刷新一下喵"}), 401
+    if User.date != Game.getDate(game_id) and User.group == "Normal":
+        return jsonify({"error": ""})
 
     new_register = UserToGameId(game_id=game_id, user_id=user_id)
-
     try:
         db.session.add(new_register)
         db.session.commit()
@@ -149,10 +141,6 @@ def remove_player():
     except Exception as e:
         db.session.rollback()
         return jsonify({"error": "服务器错误喵(╥﹏╥)"}), 500
-
-@app.route('/Day2', methods=['POST', 'GET'])
-def day2():
-    return render_template("Day2.html")
 
 
 @app.route('/login', methods=['POST', 'GET'])
