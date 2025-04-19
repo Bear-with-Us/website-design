@@ -13,21 +13,21 @@
     <!-- Swiper.js-->
     <!-- <link rel="stylesheet" href="vendor/swiper/swiper-bundle.min.css"> -->
     <!-- Universal Parallax-->
-    <link rel="stylesheet" href="vendor/universal-parallax/universal-parallax.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='vendor/universal-parallax/universal-parallax.css') }}">
     <!-- Animate.css-->
     <!-- <link rel="stylesheet" href="vendor/animate.css/source/animate.css"> -->
-    <link rel="stylesheet" href="vendor/animate.css/source/_base.css">
-    <link rel="stylesheet" href="vendor/animate.css/source/_vars.css">
-    <link rel="stylesheet" href="vendor/animate.css/source/fading_entrances/fadeInDown.css">
-    <link rel="stylesheet" href="vendor/animate.css/source/fading_entrances/fadeInUp.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='vendor/animate.css/source/_base.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='vendor/animate.css/source/_vars.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='vendor/animate.css/source/fading_entrances/fadeInDown.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='vendor/animate.css/source/fading_entrances/fadeInUp.css') }}">
     <!-- Theme stylesheet-->
-    <link rel="stylesheet" href="css/style.violet.css" id="theme-stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename="css/style.violet.css") }}" id="theme-stylesheet">
     <!-- Custom stylesheet - for your changes-->
-    <link rel="stylesheet" href="css/custom.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename="css/custom.css") }}">
     <!-- Favicon-->
     <link rel="shortcut icon" href="favicon.ico">
     <!-- 优先加载标题背景 -->
-    <link rel="preload" href="../../image/bg.webp" as="image">
+    <link rel="preload" href="{{ url_for('static', filename="image/bg.webp") }}"as="image">
     <script src="https://hm.baidu.com/hm.js?7eca61139bcaff15e4179534c2373391"></script>
     <script>
         var _hmt = _hmt || [];
