@@ -5,7 +5,7 @@ from flask import Flask
 
 # --- Flask setup ---
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///test.db'  # Or change to your DB
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///VR3.db'  # Or change to your DB
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db.init_app(app)
 
@@ -58,7 +58,7 @@ def seed_data():
                 rule=fake.sentence(nb_words=10),
                 description=fake.sentence(),
                 qq=fake.numerify(text='###########'),
-                theme=f"fake_data/test_image/image ({random.randint(1, 20)}).jpg",  # Path to image
+                theme = f"image/image ({random.randint(1, 20)}).jpg",  # Path to image
                 table=str(random.randint(1, 20)),
                 max_pl=random.randint(4, 12)  # Max players per game
             )
