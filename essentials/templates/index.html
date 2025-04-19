@@ -189,7 +189,7 @@
 									</div>
 
 									<div class="overflow-hidden" style="width: 140px; height: 180px;">
-										<img src="{{ url_for('image', game.theme) }}" alt="" class="h-100 w-100 object-fit-cover">
+										<img src="{{ url_for('static', filename=game.theme) }}" alt="" class="h-100 w-100 object-fit-cover">
 									</div>
 								</div>
 							</div>
@@ -208,13 +208,13 @@
 										</div>
 										<div class="modal-footer">
 											{% if game.id in enrolled_games %}
-											<a class="btn btn-primary" style="display: block;" href="{{ url_for('/remove_player', game_id=game.id) }}">取消报名</a>
+											<a class="btn btn-primary" style="display: block;" href="{{ url_for('remove_player', game_id=game.id) }}">取消报名</a>
 
-											<a class="btn btn-primary" style="display: none;" href="{{ url_for('/add_player', game_id=game.id) }}">报名</a>
+											<a class="btn btn-primary" style="display: none;" href="{{ url_for('add_player', game_id=game.id) }}">报名</a>
 											{% else %}
-											<a class="btn btn-primary" style="display: none;" href="{{ url_for('/remove_player', game_id=game.id) }}">取消报名</a>
+											<a class="btn btn-primary" style="display: none;" href="{{ url_for('remove_player', game_id=game.id) }}">取消报名</a>
 
-											<a class="btn btn-primary" style="display: block;" href="{{ url_for('/add_player', game_id=game.id) }}">报名</a>
+											<a class="btn btn-primary" style="display: block;" href="{{ url_for('add_player', game_id=game.id) }}">报名</a>
 											{% endif %}
 										</div>
 									</div>
@@ -246,7 +246,7 @@
 									</div>
 
 									<div class="overflow-hidden" style="width: 140px; height: 180px;">
-										<img src="{{ url_for('image', game.theme) }}" alt="" class="h-100 w-100 object-fit-cover">
+										<<img src="{{ url_for('static', filename=game.theme) }}" alt="" class="h-100 w-100 object-fit-cover">
 									</div>
 								</div>
 							</div>
@@ -265,13 +265,13 @@
 										</div>
 										<div class="modal-footer">
 											{% if game.id in enrolled_games %}
-											<a class="btn btn-primary" style="display: block;" href="{{ url_for('/remove_player', game_id=game.id) }}">取消报名</a>
+											<a class="btn btn-primary" style="display: block;" href="{{ url_for('remove_player', game_id=game.id) }}">取消报名</a>
 
-											<a class="btn btn-primary" style="display: none;" href="{{ url_for('/add_player', game_id=game.id) }}">报名</a>
+											<a class="btn btn-primary" style="display: none;" href="{{ url_for('add_player', game_id=game.id) }}">报名</a>
 											{% else %}
-											<a class="btn btn-primary" style="display: none;" href="{{ url_for('/remove_player', game_id=game.id) }}">取消报名</a>
+											<a class="btn btn-primary" style="display: none;" href="{{ url_for('remove_player', game_id=game.id) }}">取消报名</a>
 
-											<a class="btn btn-primary" style="display: block;" href="{{ url_for('/add_player', game_id=game.id) }}">报名</a>
+											<a class="btn btn-primary" style="display: block;" href="{{ url_for('add_player', game_id=game.id) }}">报名</a>
 											{% endif %}
 										</div>
 									</div>
@@ -309,7 +309,7 @@
 									</div>
 
 									<div class="overflow-hidden" style="width: 140px; height: 180px;">
-										<img src="{{ url_for('image', game.theme) }}" alt="" class="h-100 w-100 object-fit-cover">
+										<img src="{{ url_for('static', filename=game.theme) }}" alt="" class="h-100 w-100 object-fit-cover">
 									</div>
 								</div>
 							</div>
@@ -328,13 +328,13 @@
 										</div>
 										<div class="modal-footer">
 											{% if game.id in enrolled_games %}
-											<a class="btn btn-primary" style="display: block;" href="{{ url_for('/remove_player', game_id=game.id) }}">取消报名</a>
+											<a class="btn btn-primary" style="display: block;" href="{{ url_for('remove_player', game_id=game.id) }}">取消报名</a>
 
-											<a class="btn btn-primary" style="display: none;" href="{{ url_for('/add_player', game_id=game.id) }}">报名</a>
+											<a class="btn btn-primary" style="display: none;" href="{{ url_for('add_player', game_id=game.id) }}">报名</a>
 											{% else %}
-											<a class="btn btn-primary" style="display: none;" href="{{ url_for('/remove_player', game_id=game.id) }}">取消报名</a>
+											<a class="btn btn-primary" style="display: none;" href="{{ url_for('remove_player', game_id=game.id) }}">取消报名</a>
 
-											<a class="btn btn-primary" style="display: block;" href="{{ url_for('/add_player', game_id=game.id) }}">报名</a>
+											<a class="btn btn-primary" style="display: block;" href="{{ url_for('add_player', game_id=game.id) }}">报名</a>
 											{% endif %}
 										</div>
 									</div>
@@ -368,7 +368,7 @@
 									</div>
 
 									<div class="overflow-hidden" style="width: 140px; height: 180px;">
-										<img src="{{ url_for('image', game.theme) }}" alt="" class="h-100 w-100 object-fit-cover">
+										<img src="{{ url_for('static', filename=game.theme) }}" alt="" class="h-100 w-100 object-fit-cover">
 									</div>
 								</div>
 							</div>
@@ -387,13 +387,13 @@
 										</div>
 										<div class="modal-footer">
 											{% if game.id in enrolled_games %}
-											<a class="btn btn-primary" style="display: block;" href="{{ url_for('/remove_player', game_id=game.id) }}">取消报名</a>
+											<a class="btn btn-primary" style="display: block;" href="{{ url_for('remove_player', game_id=game.id) }}">取消报名</a>
 
-											<a class="btn btn-primary" style="display: none;" href="{{ url_for('/add_player', game_id=game.id) }}">报名</a>
+											<a class="btn btn-primary" style="display: none;" href="{{ url_for('add_player', game_id=game.id) }}">报名</a>
 											{% else %}
-											<a class="btn btn-primary" style="display: none;" href="{{ url_for('/remove_player', game_id=game.id) }}">取消报名</a>
+											<a class="btn btn-primary" style="display: none;" href="{{ url_for('remove_player', game_id=game.id) }}">取消报名</a>
 
-											<a class="btn btn-primary" style="display: block;" href="{{ url_for('/add_player', game_id=game.id) }}">报名</a>
+											<a class="btn btn-primary" style="display: block;" href="{{ url_for('add_player', game_id=game.id) }}">报名</a>
 											{% endif %}
 										</div>
 									</div>
