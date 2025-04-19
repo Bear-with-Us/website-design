@@ -84,16 +84,20 @@ def get_block():
     user_id = session.get('user_id')
     if user_id is None:
         return jsonify({"html": render_template('guest.html')})
+
     if session.get('logged_in'):
         user = User.query.get(user_id)
-        if User.getGroupViaPlayer(user_id) == 'Normal' and User.getDate(user_id) == 'Day1':
-            return jsonify({"html": render_template("Day1-normal.html", user=user)})
-        elif User.getGroupViaPlayer(user_id) == 'Normal' and User.getDate(user_id) == 'Day2':
-            return jsonify({"html": render_template("Day2-normal.html", user=user)})
-        else:
-            return jsonify({"html": render_template("VIP.html", user=user)})
-    return jsonify({"html": render_template('guest.html')})
+        date_val = User.getDate(user_id)
+        group_val = User.getGroupViaPlayer(user_id)
 
+        if group_val == 'Normal' and date_val == 1:
+            return jsonify({"html": render_template("Day1-normal.html", user=user)})
+        elif group_val == 'Normal' and date_val == 2:
+            return jsonify({"html": render_template("Day2-normal.html", user=user)})
+        else:  # VIP case or date == 0
+            return jsonify({"html": render_template("VIP.html", user=user)})
+
+    return jsonify({"html": render_template('guest.html')})
 
 @app.route('/add_player', methods=['POST'])
 def add_player():
@@ -102,25 +106,42 @@ def add_player():
 
     if not user_id:
         return jsonify({"error": "没有登陆呢喵╮(￣▽ ￣)╭刷新一下喵"}), 401
-    if User.date != Game.getDate(game_id) and User.group == "Normal":
-        return jsonify({"error": ""})
 
+    # Get objects
+    user = db.session.get(User, user_id)
+    game = db.session.get(Game, game_id)
+
+    if not user or not game:
+        return jsonify({"error": "用户或游戏不存在喵"}), 400
+
+    # Prevent Normal user from joining wrong day
+    if user.group == "Normal" and user.date != game.date:
+        return jsonify({"error": "只能报名你所属日期的团喵(=^-ω-^=)"}), 400
+
+    # Check if user already registered for the same session on the same day
+    existing_games = UserToGameId.getGamesViaPlayer(user_id)
+    session_games = db.session.query(Game).filter(Game.id.in_(existing_games)).all()
+    for g in session_games:
+        if g.date == game.date and g.session == game.session:
+            return jsonify({"error": "你已经报名了这个时间段的团喵(๑•́ ₃ •̀๑)"}), 400
+
+    # Check if game is full
+    current_players = db.session.query(UserToGameId).filter_by(game_id=game_id).count()
+    if current_players >= game.max_pl:
+        return jsonify({"error": "这个团已经满了喵(っ °Д °;)っ"}), 400
+
+    # Register user
     new_register = UserToGameId(game_id=game_id, user_id=user_id)
     try:
         db.session.add(new_register)
         db.session.commit()
         return jsonify({"message": "成功加入喵!φ(≧ω≦*)♪"}), 200
-
-    # Now IntegrityError is properly imported and recognized
     except IntegrityError:
         db.session.rollback()
-        logging.info("Duplicate game registration attempted")
         return jsonify({"error": "已经成功了喵！ヾ(≧∇≦*)ゝ"}), 400
-
     except Exception as e:
         db.session.rollback()
-        logging.error(f"Error: {str(e)}")
-        return jsonify({"error": "服务器没连上喵╥﹏╥..."}), 500
+        return jsonify({"error": f"服务器错误喵: {str(e)}"}), 500
 
 @app.route('/remove_player', methods=['POST'])
 def remove_player():
