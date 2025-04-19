@@ -26,7 +26,7 @@ def seed_data():
                 continue
             phone_numbers.add(phone)
             date = random.choice([0, 1, 2])  # Random date for user
-            group = 'VIP' if date == 0 else random.choice(['Normal', 'VIP'])
+            group = 'VIP' if date == 0 else 'Normal'
 
             user = User(
                 phone=phone,
