@@ -20,19 +20,37 @@ def initialise_db():
 
 @app.route('/')
 def home():
-    # If user is logged in, greet them; otherwise prompt to log in
-    # session is a dictionary containing all information stored by the current user
+    # First, get the user_id from session
+    user_id = session.get('user_id')
+
+    # Query the database for game information
     day1_gamesA = Game.query.filter_by(date=1, session='A').all()
     day2_gamesA = Game.query.filter_by(date=2, session='A').all()
     day1_gamesB = Game.query.filter_by(date=1, session='B').all()
     day2_gamesB = Game.query.filter_by(date=2, session='B').all()
     game_list = Game.query.all()
-    user_id = session.get('user_id')
+
+    # Calculate space reserved for each game
     space_reserved = {}
     for game in game_list:
         space_reserved[game.id] = db.session.query(UserToGameId).filter_by(game_id=game.id).count()
-    enrolled_game = [game.id for game in game_list if game.id in UserToGameId.getGamesViaPlayer(user_id)]
-    return render_template("index.html", day1_gamesA=day1_gamesA, day2_gamesA=day2_gamesA,day1_gamesB=day1_gamesB, day2_gamesB=day2_gamesB, space_reserved=space_reserved, enrolled_game=enrolled_game)
+
+    # Get enrolled games for the logged-in user
+    enrolled_game = []
+    if user_id:
+        enrolled_game = [game.id for game in game_list if game.id in UserToGameId.getGamesViaPlayer(user_id)]
+
+    # Create JSON string for JavaScript
+    enrolled_js = json.dumps(enrolled_game)
+
+    return render_template("index.html",
+                           day1_gamesA=day1_gamesA,
+                           day2_gamesA=day2_gamesA,
+                           day1_gamesB=day1_gamesB,
+                           day2_gamesB=day2_gamesB,
+                           space_reserved=space_reserved,
+                           enrolled_game=enrolled_game,
+                           enrolled_js=enrolled_js)
 
 @app.route('/admin', methods=['POST', 'GET'])
 def admin():
@@ -82,22 +100,30 @@ def admin():
 @app.route('/get_block')
 def get_block():
     user_id = session.get('user_id')
-    if user_id is None:
+    logged_in = session.get('logged_in')
+
+    print(f"get_block called: user_id={user_id}, logged_in={logged_in}")  # Debug
+
+    if user_id is None or not logged_in:
         return jsonify({"html": render_template('guest.html')})
 
-    if session.get('logged_in'):
-        user = User.query.get(user_id)
-        date_val = User.getDate(user_id)
-        group_val = User.getGroupViaPlayer(user_id)
+    user = db.session.get(User, user_id)
+    if not user:
+        print(f"User not found for id: {user_id}")  # Debug
+        return jsonify({"html": render_template('guest.html')})
 
-        if group_val == 'Normal' and date_val == 1:
-            return jsonify({"html": render_template("Day1-normal.html", user=user)})
-        elif group_val == 'Normal' and date_val == 2:
-            return jsonify({"html": render_template("Day2-normal.html", user=user)})
-        else:  # VIP case or date == 0
-            return jsonify({"html": render_template("VIP.html", user=user)})
+    date_val = User.getDate(user_id)
+    group_val = User.getGroupViaPlayer(user_id)
 
-    return jsonify({"html": render_template('guest.html')})
+    print(f"User details: id={user_id}, date={date_val}, group={group_val}")  # Debug
+
+    if group_val == 'Normal' and date_val == 1:
+        return jsonify({"html": render_template("Day1-normal.html", user=user)})
+    elif group_val == 'Normal' and date_val == 2:
+        return jsonify({"html": render_template("Day2-normal.html", user=user)})
+    else:  # VIP case or date == 0
+        return jsonify({"html": render_template("VIP.html", user=user)})
+
 
 @app.route('/add_player', methods=['POST'])
 def add_player():
@@ -164,26 +190,39 @@ def remove_player():
         return jsonify({"error": "服务器错误喵(╥﹏╥)"}), 500
 
 
-@app.route('/login', methods=['POST', 'GET'])
+@app.route('/login', methods=['POST'])
 def login():
     data = request.get_json()
-    username = int(data.get('username'))
-    password = (data.get('password'))
+    if not data:
+        return jsonify({"success": False, "error": "No data received"}), 400
 
-    if username == 20611741 and password == "space.bilibili.com/20611741?spm_id_from=333.1387.follow.user_card.click":
-        session['user_id'] = username
-        return redirect(url_for('admin'))
+    try:
+        username = int(data.get('username'))
+        password = data.get('password')
 
-    if User.exist(username):
-        if User.isCorrect(username, password):
+        print(f"Login attempt for user: {username}")  # Debug
+
+        if username == 20611741 and password == "space.bilibili.com/20611741?spm_id_from=333.1387.follow.user_card.click":
             session['user_id'] = username
             session['logged_in'] = True
-            return jsonify({"success": True})
-        return jsonify({"success": False})
+            return jsonify({"success": True, "redirect": url_for('admin')})
 
+        if User.exist(username):
+            if User.isCorrect(username, password):
+                session['user_id'] = username
+                session['logged_in'] = True
+                print(f"Login successful for user: {username}")  # Debug
+                return jsonify({"success": True})
+            print(f"Incorrect password for user: {username}")  # Debug
+            return jsonify({"success": False, "error": "Password incorrect"})
 
+        print(f"User does not exist: {username}")  # Debug
+        return jsonify({"success": False, "error": "User not found"})
 
-    return jsonify({"success": False})
+    except Exception as e:
+        print(f"Login error: {str(e)}")  # Debug
+        return jsonify({"success": False, "error": str(e)}), 500
+
 
 @app.route('/logout', methods=['GET'])
 def logout():

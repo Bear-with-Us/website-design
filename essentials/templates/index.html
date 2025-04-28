@@ -455,12 +455,13 @@
 		fetch('/get_block')
 		.then(res => res.json())
 		.then(data => {
-		  	document.getElementById('dynamic-content').innerHTML = data.html;
+			document.getElementById('dynamic-content').innerHTML = data.html;
 			const login_form = document.getElementById('login-form');
 			if (login_form) {
 				login_form.addEventListener('submit', (e) => {
 					e.preventDefault();
 
+					// Get form inputs
 					const username = login_form.querySelector('input[name="username"]').value;
 					const password = login_form.querySelector('input[name="password"]').value;
 
@@ -475,25 +476,48 @@
 						.then(res => res.json())
 						.then(data => {
 							if (data.success) {
-								loadBlock(); // Refresh the content for the logged-in view
+								console.log("Login successful, reloading page");
+								// CHANGE: Reload the entire page instead of just updating the dynamic content
+								window.location.reload();
 							} else {
-								alert('登录失败，请检查手机号和密码');
+								console.log("Login failed");
+								// Show error message
+								creatMsg("提示", "密码错误！", "danger");
 							}
 						})
+						.catch(err => {
+							console.error("Login error:", err);
+							creatMsg("提示", "登录请求失败，请重试", "warning");
+						});
 					}
-				})
+				});
 			}
+		})
+		.catch(err => {
+			console.error("Error loading block:", err);
 		});
 	}
 
 
 
+
 	function logout() {
-		fetch('/logout', { method: 'POST' }).then(loadBlock);
+		fetch('/logout')
+		.then(res => res.json())
+		.then(data => {
+			console.log("Logout successful");
+			// Reload the entire page
+			window.location.reload();
+		})
+		.catch(err => {
+			console.error("Logout error:", err);
+		});
 	}
 
 	window.onload = loadBlock;
 </script>
+
+
 
 <script>
 	// post请求+msg
@@ -551,6 +575,32 @@
 	function mixitup() {}
 
 	function Waypoint() {}
+</script>
+
+<script>
+    // Mark enrolled games
+    document.addEventListener('DOMContentLoaded', function() {
+        // Make sure to use safe filter to prevent escaping
+        const enrolledGames = {{ enrolled_js|safe }};
+
+        console.log("Enrolled games:", enrolledGames);
+
+        // Mark each enrolled game
+        enrolledGames.forEach(gameId => {
+            const signedElement = document.getElementById(`signed_${gameId}`);
+            if (signedElement) {
+                console.log(`Marking game ${gameId} as enrolled`);
+                signedElement.style.display = 'block';
+            }
+
+            // Update join/leave buttons visibility if needed
+            const joinBtn = document.querySelector(`a[href="{{ url_for('add_player', game_id='') }}${gameId}"]`);
+            const leaveBtn = document.querySelector(`a[href="{{ url_for('remove_player', game_id='') }}${gameId}"]`);
+
+            if (joinBtn) joinBtn.style.display = 'none';
+            if (leaveBtn) leaveBtn.style.display = 'block';
+        });
+    });
 </script>
 <!-- FontAwesome CSS - loading as last, so it doesn't block rendering-->
 <!-- <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css"

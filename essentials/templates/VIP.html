@@ -1,35 +1,24 @@
+<!-- VIP.html -->
 <header class="mb-4">
-	<div class="row mb-4 wow fadeInUp">
-		<div class="col-lg-12 mx-auto">
-			<h2 class="heading">现场团报名</h2>
-		</div>
+    <div class="row mb-4 wow fadeInUp" style="visibility: visible; animation-name: fadeInUp;">
+        <div class="col-lg-12 mx-auto">
+            <h2 class="heading">现场团报名</h2>
+        </div>
+        <div class="col-lg-12 mx-auto text-gray-500">
+            <!-- Make sure the user ID is displayed correctly -->
+            Hello！{{ user.id if user else '' }}，您是大旅法！<a href="#" onclick="logout(); return false;">退出登录</a>
+        </div>
+    </div>
 
-		<div id="logindiv" class="col-lg-6 mx-auto row">
+    <p class="lead text-muted wow fadeInUp" data-wow-delay="0.1s">
+        <strong class="text-primary">活动报名时间：</strong>2024-08-11 12:00:00 ~ 2024-08-16 11:59:59
+    </p>
 
-			<div class="col-lg-12 mx-auto text-gray-500">
-				Hello！{{ user.id }}，您是大旅法！<a href="{{ url_for('logout' )}}">退出登录</a>
-			</div>
+    <p class="lead text-muted wow fadeInUp" data-wow-delay="0.2s">
+        作为VIP玩家，您可以报名 <strong class="text-primary">所有场次的团</strong>，
+    </p>
 
-		</div>
-
-	</div>
-	<!-- 团信息 -->
-
-	<p class="lead text-muted wow fadeInUp" data-wow-delay="0.1s">
-		<strong class="text-primary">活动报名时间：</strong>2024-08-11 12:00:00
-		~ 2024-08-16 11:59:59
-	</p>
-	<p class="lead text-muted wow fadeInUp" data-wow-delay="0.1s">
-		作为普通玩家，您可以报名
-
-		<strong
-			class="text-primary">全场团</strong>1个，
-
-	</p>
-
-	<p class="lead text-muted wow fadeInUp" data-wow-delay="0.2s">
-
-		<strong class="text-primary">可以取消</strong>报名改报其他团，报名截止后不可更改（如需修改请联系主办方）
-
-	</p>
+    <p class="lead text-muted wow fadeInUp" data-wow-delay="0.2s">
+        <strong class="text-primary">可以取消</strong>报名改报其他团，报名截止后不可更改（如需修改请联系主办方）
+    </p>
 </header>
