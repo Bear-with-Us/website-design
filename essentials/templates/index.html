@@ -323,14 +323,14 @@
                                                 <strong>跑团桌位：</strong>{{ game.table }}
                                             </div>
                                             <div class="modal-footer">
-                                                {% if game.id in enrolled_game %}
-                                                <a class="btn btn-primary" style="display: block;" href="{{ url_for('remove_player', game_id=game.id) }}">取消报名</a>
-                                                <a class="btn btn-primary" style="display: none;" href="{{ url_for('add_player', game_id=game.id) }}">报名</a>
-                                                {% else %}
-                                                <a class="btn btn-primary" style="display: none;" href="{{ url_for('remove_player', game_id=game.id) }}">取消报名</a>
-                                                <a class="btn btn-primary" style="display: block;" href="{{ url_for('add_player', game_id=game.id) }}">报名</a>
-                                                {% endif %}
-                                            </div>
+												{% if game.id in enrolled_game %}
+												<a class="btn btn-primary" style="display: block;" href="{{ url_for('remove_player', game_id=game.id) }}" onclick="return handleGameAction(this)">取消报名</a>
+												<a class="btn btn-primary" style="display: none;" href="{{ url_for('add_player', game_id=game.id) }}" onclick="return handleGameAction(this)">报名</a>
+												{% else %}
+												<a class="btn btn-primary" style="display: none;" href="{{ url_for('remove_player', game_id=game.id) }}" onclick="return handleGameAction(this)">取消报名</a>
+												<a class="btn btn-primary" style="display: block;" href="{{ url_for('add_player', game_id=game.id) }}" onclick="return handleGameAction(this)">报名</a>
+												{% endif %}
+											</div>
                                         </div>
                                     </div>
                                 </div>
@@ -378,14 +378,14 @@
                                                 <strong>跑团桌位：</strong>{{ game.table }}
                                             </div>
                                             <div class="modal-footer">
-                                                {% if game.id in enrolled_game %}
-                                                <a class="btn btn-primary" style="display: block;" href="{{ url_for('remove_player', game_id=game.id) }}">取消报名</a>
-                                                <a class="btn btn-primary" style="display: none;" href="{{ url_for('add_player', game_id=game.id) }}">报名</a>
-                                                {% else %}
-                                                <a class="btn btn-primary" style="display: none;" href="{{ url_for('remove_player', game_id=game.id) }}">取消报名</a>
-                                                <a class="btn btn-primary" style="display: block;" href="{{ url_for('add_player', game_id=game.id) }}">报名</a>
-                                                {% endif %}
-                                            </div>
+												{% if game.id in enrolled_game %}
+												<a class="btn btn-primary" style="display: block;" href="{{ url_for('remove_player', game_id=game.id) }}" onclick="return handleGameAction(this)">取消报名</a>
+												<a class="btn btn-primary" style="display: none;" href="{{ url_for('add_player', game_id=game.id) }}" onclick="return handleGameAction(this)">报名</a>
+												{% else %}
+												<a class="btn btn-primary" style="display: none;" href="{{ url_for('remove_player', game_id=game.id) }}" onclick="return handleGameAction(this)">取消报名</a>
+												<a class="btn btn-primary" style="display: block;" href="{{ url_for('add_player', game_id=game.id) }}" onclick="return handleGameAction(this)">报名</a>
+												{% endif %}
+											</div>
                                         </div>
                                     </div>
                                 </div>
@@ -650,6 +650,38 @@
     });
 
     // Rest of your existing scripts...
+</script>
+
+<script>
+    function handleGameAction(link) {
+		// Important: prevent default action first
+		event.preventDefault();
+
+		console.log('handleGameAction called for', link.href);
+
+		fetch(link.href)
+		.then(response => {
+			console.log('Response received:', response);
+			return response.json();
+		})
+		.then(data => {
+			console.log('Data received:', data);
+			if (data.message) {
+				creatMsg("成功", data.message, "success");
+				// Reload the page to refresh game status after a short delay
+				console.log('Reloading page in 1 second...');
+				setTimeout(() => window.location.reload(), 1000);
+			} else if (data.error) {
+				creatMsg("错误", data.error, "danger");
+			}
+		})
+		.catch(error => {
+			console.error('Error:', error);
+			creatMsg("提示", "与服务器通信发生错误", "warning");
+		});
+
+		return false; // Prevent the link from being followed
+	}
 </script>
 
 <!-- FontAwesome CSS - loading as last, so it doesn't block rendering-->

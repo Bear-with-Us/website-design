@@ -125,8 +125,9 @@ def get_block():
         return jsonify({"html": render_template("VIP.html", user=user)})
 
 
-@app.route('/add_player', methods=['POST'])
+@app.route('/add_player', methods=['GET', 'POST'])
 def add_player():
+    # Get game_id from either query parameters (GET) or request body (POST)
     game_id = request.args.get('game_id')
     user_id = session.get('user_id')
 
@@ -169,7 +170,8 @@ def add_player():
         db.session.rollback()
         return jsonify({"error": f"服务器错误喵: {str(e)}"}), 500
 
-@app.route('/remove_player', methods=['POST'])
+
+@app.route('/remove_player', methods=['GET', 'POST'])
 def remove_player():
     game_id = request.args.get('game_id')
     user_id = session.get('user_id')

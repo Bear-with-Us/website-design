@@ -95,12 +95,12 @@ class UserToGameId(db.Model):
 
     @staticmethod
     def getPlayersViaGame(game: int) -> list:
-        return [player[0] for player in db.session.query(UserToGameId).filter_by(game_id=game).all()]
+        return [player.user_id for player in db.session.query(UserToGameId).filter_by(game_id=game).all()]
 
     @staticmethod
-    def getGamesViaPlayer(user: int) -> list:
-        return [player[0] for player in db.session.query(UserToGameId).filter_by(user_id=user).all()]
-
+    def getGamesViaPlayer(user):
+        # Get all UserToGameId entries for this user and return the game_id attribute from each
+        return [player.game_id for player in db.session.query(UserToGameId).filter_by(user_id=user).all()]
 
 class Sponsor(db.Model):
     __tablename__ = 'Sponsor'
