@@ -141,272 +141,264 @@
 
 
 <!-- display game list -->
+<!-- display game list -->
 <section id="apply" style="background-color: var(--color-bg);">
-	<div class="container text-center">
-		<div id="dynamic-content">Loading...</div>
+    <div class="container text-center">
+        <!-- Only login/user info changes dynamically -->
+        <div id="dynamic-content">Loading...</div>
 
-		<ul class="nav nav-tabs" id="myTab" role="tablist">
+        <!-- Debug info for troubleshooting -->
+        <div id="debug-info" class="small text-muted mb-3">
+            Game data: Day1A({{ day1_gamesA|length }}), Day1B({{ day1_gamesB|length }}),
+            Day2A({{ day2_gamesA|length }}), Day2B({{ day2_gamesB|length }})
+        </div>
 
-			<!-- 如果玩家未登录或能报名该项 -->
+        <!-- Game tabs and listing remain static -->
+        <div id="game-tabs-container" class="mt-4">
+            <!-- Game tabs and content here -->
+            <ul class="nav nav-tabs" id="myTab" role="tablist">
+                <li class="nav-item me-3" role="presentation">
+                    <button class="nav-link" id="day1-tab" data-bs-toggle="tab" data-bs-target="#day1-content" type="button" role="tab" aria-controls="day1-content" aria-selected="false">5月31号团</button>
+                </li>
+                <li class="nav-item me-3" role="presentation">
+                    <button class="nav-link active" id="day2-tab" data-bs-toggle="tab" data-bs-target="#day2-content" type="button" role="tab" aria-controls="day2-content" aria-selected="true">6月1号团</button>
+                </li>
+            </ul>
 
-			<li class="nav-item me-3" role="presentation">
-				<button class="nav-link" id="31日团-tab" data-bs-toggle="tab" data-bs-target="#31日团" type="button" role="tab" aria-controls="5月31号团" aria-selected="false" tabindex="-1">5月31号团</button>
-			</li>
+            <div class="tab-content" id="myTabContent">
+                <!-- Day 1 tab content -->
+                <div class="tab-pane fade" id="day1-content" role="tabpanel" aria-labelledby="day1-tab">
+                    <details style="text-align: left;" open="">
+                        <summary style="line-height:3em;">上半场</summary>
+                        <div class="row">
+                            {% for game in day1_gamesA %}
+                                <div class="equal-height h-auto mb-3 col-xl-6 bg-white p-4 position-relative">
+                                    <div class="row">
+                                        <div style="width: calc(100% - 140px);" class="position-relative">
+                                            <div class="text-lg position-absolute top-0 end-0 opacity-25 text-gray-500" id="signed_{{ game.id }}" style="transform: rotate(20deg);display: none;">
+                                                <strong>已报名</strong>
+                                            </div>
+                                            <p class="mb-2 text-gray-500 text-start">
+                                                <strong style="font-size: 1.5rem;" class="text-primary">【{{ game.rule }}】{{ game.name }}</strong><br>
+                                                <strong>主持：</strong>{{ game.kp }}<br>
+                                                <strong>场次：</strong>上半场<br>
+                                            </p>
+                                            <p class="mb-0 text-gray-500 text-start">
+                                                剩余空位：<strong class="text-primary text-lg">{{ game.max_pl-space_reserved[game.id] }}</strong>
+                                            </p>
+                                            <div class="position-absolute bottom-0 end-0">
+                                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal_{{ game.id }}">详情</button>
+                                            </div>
+                                        </div>
+                                        <div class="overflow-hidden" style="width: 140px; height: 180px;">
+                                            <img src="{{ url_for('static', filename=game.theme) }}" alt="" class="h-100 w-100 object-fit-cover">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal fade text-start" id="modal_{{ game.id }}" tabindex="-1" aria-labelledby="myModalLabel" style="display: none;" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="myModalLabel">{{ game.name }}</h5>
+                                                <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="card-body p-4">
+                                                <strong>规则：</strong><br>{{ game.rule }}<br><br>
+                                                <strong>背景介绍：</strong><br>{{ game.description }}<br><br>
+                                                <strong>QQ：</strong>{{ game.qq }}<br><br>
+                                                <strong>跑团桌位：</strong>{{ game.table }}
+                                            </div>
+                                            <div class="modal-footer">
+                                                {% if game.id in enrolled_game %}
+                                                <a class="btn btn-primary" style="display: block;" href="{{ url_for('remove_player', game_id=game.id) }}">取消报名</a>
+                                                <a class="btn btn-primary" style="display: none;" href="{{ url_for('add_player', game_id=game.id) }}">报名</a>
+                                                {% else %}
+                                                <a class="btn btn-primary" style="display: none;" href="{{ url_for('remove_player', game_id=game.id) }}">取消报名</a>
+                                                <a class="btn btn-primary" style="display: block;" href="{{ url_for('add_player', game_id=game.id) }}">报名</a>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </details>
+                    <details style="text-align: left;" open="">
+                        <summary style="line-height:3em;">下半场</summary>
+                        <div class="row">
+                            {% for game in day1_gamesB %}
+                                <div class="equal-height h-auto mb-3 col-xl-6 bg-white p-4 position-relative">
+                                    <div class="row">
+                                        <div style="width: calc(100% - 140px);" class="position-relative">
+                                            <div class="text-lg position-absolute top-0 end-0 opacity-25 text-gray-500" id="signed_{{ game.id }}" style="transform: rotate(20deg);display: none;">
+                                                <strong>已报名</strong>
+                                            </div>
+                                            <p class="mb-2 text-gray-500 text-start">
+                                                <strong style="font-size: 1.5rem;" class="text-primary">【{{ game.rule }}】{{ game.name }}</strong><br>
+                                                <strong>主持：</strong>{{ game.kp }}<br>
+                                                <strong>场次：</strong>下半场<br>
+                                            </p>
+                                            <p class="mb-0 text-gray-500 text-start">
+                                                剩余空位：<strong class="text-primary text-lg">{{ game.max_pl-space_reserved[game.id] }}</strong>
+                                            </p>
+                                            <div class="position-absolute bottom-0 end-0">
+                                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal_{{ game.id }}">详情</button>
+                                            </div>
+                                        </div>
+                                        <div class="overflow-hidden" style="width: 140px; height: 180px;">
+                                            <img src="{{ url_for('static', filename=game.theme) }}" alt="" class="h-100 w-100 object-fit-cover">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal fade text-start" id="modal_{{ game.id }}" tabindex="-1" aria-labelledby="myModalLabel" style="display: none;" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="myModalLabel">{{ game.name }}</h5>
+                                                <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="card-body p-4">
+                                                <strong>规则：</strong><br>{{ game.rule }}<br><br>
+                                                <strong>背景介绍：</strong><br>{{ game.description }}<br><br>
+                                                <strong>QQ：</strong>{{ game.qq }}<br><br>
+                                                <strong>跑团桌位：</strong>{{ game.table }}
+                                            </div>
+                                            <div class="modal-footer">
+                                                {% if game.id in enrolled_game %}
+                                                <a class="btn btn-primary" style="display: block;" href="{{ url_for('remove_player', game_id=game.id) }}">取消报名</a>
+                                                <a class="btn btn-primary" style="display: none;" href="{{ url_for('add_player', game_id=game.id) }}">报名</a>
+                                                {% else %}
+                                                <a class="btn btn-primary" style="display: none;" href="{{ url_for('remove_player', game_id=game.id) }}">取消报名</a>
+                                                <a class="btn btn-primary" style="display: block;" href="{{ url_for('add_player', game_id=game.id) }}">报名</a>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </details>
+                </div>
 
-
-			<!-- 如果玩家未登录或能报名该项 -->
-
-			<li class="nav-item me-3" role="presentation">
-				<button class="nav-link active" id="1日团-tab" data-bs-toggle="tab" data-bs-target="#1日团" type="button" role="tab" aria-controls="6月1号团" aria-selected="true">6月1号团</button>
-			</li>
-
-
-		</ul>
-		<div class="tab-content" id="myTabContent">
-
-			<div class="tab-pane fade" id="5月31日" role="tabpanel" aria-labelledby="Day1-tab">
-				<details style="text-align: left;" open="">
-					<summary style="line-height:3em;">上半场</summary>
-					<div class="row">
-						{% for game in day1_gamesA %}
-
-							<div class="equal-height h-auto mb-3 col-xl-6 bg-white p-4 position-relative">
-								<div class="row">
-									<div style="width: calc(100% - 140px);" class="position-relative">
-
-										<div class="text-lg position-absolute top-0 end-0 opacity-25 text-gray-500" id="signed_{{ game.id }}" style="transform: rotate(20deg);display: none;">
-											<strong>已报名</strong>
-										</div>
-
-										<p class="mb-2 text-gray-500 text-start">
-											<strong style="font-size: 1.5rem;" class="text-primary">【{{ game.rule }}】{{ game.name }}</strong><br>
-											<strong>主持：</strong>{{ game.kp }}<br>
-											<strong>场次：</strong>上半场<br>
-										</p>
-										<p class="mb-0 text-gray-500 text-start">剩余空位：<strong class="text-primary text-lg">{{ game.max_pl-space_reserved[game.id] }}</strong>
-										</p>
-										<div class="position-absolute bottom-0 end-0"><button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#7081">详情</button></div>
-									</div>
-
-									<div class="overflow-hidden" style="width: 140px; height: 180px;">
-										<img src="{{ url_for('static', filename=game.theme) }}" alt="" class="h-100 w-100 object-fit-cover">
-									</div>
-								</div>
-							</div>
-							<div class="modal fade text-start" id="{{ game.id }}" tabindex="-1" aria-labelledby="myModalLabel" style="display: none;" aria-hidden="true">
-								<div class="modal-dialog">
-									<div class="modal-content">
-										<div class="modal-header">
-											<h5 class="modal-title" id="myModalLabel">{{ game.name }}</h5>
-											<button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
-										</div>
-										<div class="card-body p-4">
-											<strong>规则：</strong><br>{{ game.rule }}<br><br>
-											<strong>背景介绍：</strong><br>{{ game.description }}<br><br>
-											<strong>QQ：</strong>{{ game.qq }}<br><br>
-											<strong>跑团桌位：</strong>{{ game.table }}
-										</div>
-										<div class="modal-footer">
-											{% if game.id in enrolled_games %}
-											<a class="btn btn-primary" style="display: block;" href="{{ url_for('remove_player', game_id=game.id) }}">取消报名</a>
-
-											<a class="btn btn-primary" style="display: none;" href="{{ url_for('add_player', game_id=game.id) }}">报名</a>
-											{% else %}
-											<a class="btn btn-primary" style="display: none;" href="{{ url_for('remove_player', game_id=game.id) }}">取消报名</a>
-
-											<a class="btn btn-primary" style="display: block;" href="{{ url_for('add_player', game_id=game.id) }}">报名</a>
-											{% endif %}
-										</div>
-									</div>
-								</div>
-							</div>
-						{% endfor %}
-					</div>
-				</details>
-				<details style="text-align: left;" open="">
-					<summary style="line-height:3em;">下半场</summary>
-					<div class="row">
-						{% for game in day1_gamesB %}
-							<div class="equal-height h-auto mb-3 col-xl-6 bg-white p-4 position-relative">
-								<div class="row">
-									<div style="width: calc(100% - 140px);" class="position-relative">
-
-										<div class="text-lg position-absolute top-0 end-0 opacity-25 text-gray-500" id="signed_{{ game.id }}" style="transform: rotate(20deg);display: none;">
-											<strong>已报名</strong>
-										</div>
-
-										<p class="mb-2 text-gray-500 text-start">
-											<strong style="font-size: 1.5rem;" class="text-primary">【{{ game.rule }}】{{ game.name }}</strong><br>
-											<strong>主持：</strong>{{ game.kp }}<br>
-											<strong>场次：</strong>下半场<br>
-										</p>
-										<p class="mb-0 text-gray-500 text-start">剩余空位：<strong class="text-primary text-lg">{{ game.max_pl-space_reserved[game.id] }}</strong>
-										</p>
-										<div class="position-absolute bottom-0 end-0"><button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#7081">详情</button></div>
-									</div>
-
-									<div class="overflow-hidden" style="width: 140px; height: 180px;">
-										<<img src="{{ url_for('static', filename=game.theme) }}" alt="" class="h-100 w-100 object-fit-cover">
-									</div>
-								</div>
-							</div>
-							<div class="modal fade text-start" id="{{ game.id }}" tabindex="-1" aria-labelledby="myModalLabel" style="display: none;" aria-hidden="true">
-								<div class="modal-dialog">
-									<div class="modal-content">
-										<div class="modal-header">
-											<h5 class="modal-title" id="myModalLabel">{{ game.name }}</h5>
-											<button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
-										</div>
-										<div class="card-body p-4">
-											<strong>规则：</strong><br>{{ game.rule }}<br><br>
-											<strong>背景介绍：</strong><br>{{ game.description }}<br><br>
-											<strong>QQ：</strong>{{ game.qq }}<br><br>
-											<strong>跑团桌位：</strong>{{ game.table }}
-										</div>
-										<div class="modal-footer">
-											{% if game.id in enrolled_games %}
-											<a class="btn btn-primary" style="display: block;" href="{{ url_for('remove_player', game_id=game.id) }}">取消报名</a>
-
-											<a class="btn btn-primary" style="display: none;" href="{{ url_for('add_player', game_id=game.id) }}">报名</a>
-											{% else %}
-											<a class="btn btn-primary" style="display: none;" href="{{ url_for('remove_player', game_id=game.id) }}">取消报名</a>
-
-											<a class="btn btn-primary" style="display: block;" href="{{ url_for('add_player', game_id=game.id) }}">报名</a>
-											{% endif %}
-										</div>
-									</div>
-
-								</div>
-							</div>
-						{% endfor %}
-					</div>
-				</details>
-			</div>
-
-
-			<div class="tab-pane fade" id="6月1日" role="tabpanel" aria-labelledby="Day2-tab">
-				<details style="text-align: left;" open="">
-					<summary style="line-height:3em;">上半场</summary>
-					<div class="row">
-						{% for game in day2_gamesA %}
-
-							<div class="equal-height h-auto mb-3 col-xl-6 bg-white p-4 position-relative">
-								<div class="row">
-									<div style="width: calc(100% - 140px);" class="position-relative">
-
-										<div class="text-lg position-absolute top-0 end-0 opacity-25 text-gray-500" id="signed_{{ game.id }}" style="transform: rotate(20deg);display: none;">
-											<strong>已报名</strong>
-										</div>
-
-										<p class="mb-2 text-gray-500 text-start">
-											<strong style="font-size: 1.5rem;" class="text-primary">【{{ game.rule }}】{{ game.name }}</strong><br>
-											<strong>主持：</strong>{{ game.kp }}<br>
-											<strong>场次：</strong>上半场<br>
-										</p>
-										<p class="mb-0 text-gray-500 text-start">剩余空位：<strong class="text-primary text-lg">{{ game.max_pl-space_reserved[game.id] }}</strong>
-										</p>
-										<div class="position-absolute bottom-0 end-0"><button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#7081">详情</button></div>
-									</div>
-
-									<div class="overflow-hidden" style="width: 140px; height: 180px;">
-										<img src="{{ url_for('static', filename=game.theme) }}" alt="" class="h-100 w-100 object-fit-cover">
-									</div>
-								</div>
-							</div>
-							<div class="modal fade text-start" id="7081" tabindex="-1" aria-labelledby="myModalLabel" style="display: none;" aria-hidden="true">
-								<div class="modal-dialog">
-									<div class="modal-content">
-										<div class="modal-header">
-											<h5 class="modal-title" id="myModalLabel">{{ game.name }}</h5>
-											<button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
-										</div>
-										<div class="card-body p-4">
-											<strong>规则：</strong><br>{{ game.rule }}<br><br>
-											<strong>背景介绍：</strong><br>{{ game.description }}<br><br>
-											<strong>QQ：</strong>{{ game.qq }}<br><br>
-											<strong>跑团桌位：</strong>{{ game.table }}
-										</div>
-										<div class="modal-footer">
-											{% if game.id in enrolled_games %}
-											<a class="btn btn-primary" style="display: block;" href="{{ url_for('remove_player', game_id=game.id) }}">取消报名</a>
-
-											<a class="btn btn-primary" style="display: none;" href="{{ url_for('add_player', game_id=game.id) }}">报名</a>
-											{% else %}
-											<a class="btn btn-primary" style="display: none;" href="{{ url_for('remove_player', game_id=game.id) }}">取消报名</a>
-
-											<a class="btn btn-primary" style="display: block;" href="{{ url_for('add_player', game_id=game.id) }}">报名</a>
-											{% endif %}
-										</div>
-									</div>
-
-								</div>
-							</div>
-						{% endfor %}
-					</div>
-				</details>
-				<details style="text-align: left;" open="">
-					<summary style="line-height:3em;">下半场</summary>
-					<div class="row">
-						{% for game in day2_gamesB %}
-
-							<div class="equal-height h-auto mb-3 col-xl-6 bg-white p-4 position-relative">
-								<div class="row">
-									<div style="width: calc(100% - 140px);" class="position-relative">
-
-										<div class="text-lg position-absolute top-0 end-0 opacity-25 text-gray-500" id="signed_{{ game.id }}" style="transform: rotate(20deg);display: none;">
-											<strong>已报名</strong>
-										</div>
-
-										<p class="mb-2 text-gray-500 text-start">
-											<strong style="font-size: 1.5rem;" class="text-primary">【{{ game.rule }}】{{ game.name }}</strong><br>
-											<strong>主持：</strong>{{ game.kp }}<br>
-											<strong>场次：</strong>上半场<br>
-										</p>
-										<p class="mb-0 text-gray-500 text-start">剩余空位：<strong class="text-primary text-lg">{{ game.max_pl-space_reserved[game.id] }}</strong>
-										</p>
-										<div class="position-absolute bottom-0 end-0"><button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#7081">详情</button></div>
-									</div>
-
-									<div class="overflow-hidden" style="width: 140px; height: 180px;">
-										<img src="{{ url_for('static', filename=game.theme) }}" alt="" class="h-100 w-100 object-fit-cover">
-									</div>
-								</div>
-							</div>
-							<div class="modal fade text-start" id="{{ game.id }}" tabindex="-1" aria-labelledby="myModalLabel" style="display: none;" aria-hidden="true">
-								<div class="modal-dialog">
-									<div class="modal-content">
-										<div class="modal-header">
-											<h5 class="modal-title" id="myModalLabel">{{ game.name }}</h5>
-											<button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
-										</div>
-										<div class="card-body p-4">
-											<strong>规则：</strong><br>{{ game.rule }}<br><br>
-											<strong>背景介绍：</strong><br>{{ game.description }}<br><br>
-											<strong>QQ：</strong>{{ game.qq }}<br><br>
-											<strong>跑团桌位：</strong>{{ game.table }}
-										</div>
-										<div class="modal-footer">
-											{% if game.id in enrolled_games %}
-											<a class="btn btn-primary" style="display: block;" href="{{ url_for('remove_player', game_id=game.id) }}">取消报名</a>
-
-											<a class="btn btn-primary" style="display: none;" href="{{ url_for('add_player', game_id=game.id) }}">报名</a>
-											{% else %}
-											<a class="btn btn-primary" style="display: none;" href="{{ url_for('remove_player', game_id=game.id) }}">取消报名</a>
-
-											<a class="btn btn-primary" style="display: block;" href="{{ url_for('add_player', game_id=game.id) }}">报名</a>
-											{% endif %}
-										</div>
-									</div>
-								</div>
-							</div>
-						{% endfor %}
-					</div>
-				</details>
-			</div>
-
-		</div>
-	</div>
+                <!-- Day 2 tab content -->
+                <div class="tab-pane fade show active" id="day2-content" role="tabpanel" aria-labelledby="day2-tab">
+                    <details style="text-align: left;" open="">
+                        <summary style="line-height:3em;">上半场</summary>
+                        <div class="row">
+                            {% for game in day2_gamesA %}
+                                <div class="equal-height h-auto mb-3 col-xl-6 bg-white p-4 position-relative">
+                                    <div class="row">
+                                        <div style="width: calc(100% - 140px);" class="position-relative">
+                                            <div class="text-lg position-absolute top-0 end-0 opacity-25 text-gray-500" id="signed_{{ game.id }}" style="transform: rotate(20deg);display: none;">
+                                                <strong>已报名</strong>
+                                            </div>
+                                            <p class="mb-2 text-gray-500 text-start">
+                                                <strong style="font-size: 1.5rem;" class="text-primary">【{{ game.rule }}】{{ game.name }}</strong><br>
+                                                <strong>主持：</strong>{{ game.kp }}<br>
+                                                <strong>场次：</strong>上半场<br>
+                                            </p>
+                                            <p class="mb-0 text-gray-500 text-start">
+                                                剩余空位：<strong class="text-primary text-lg">{{ game.max_pl-space_reserved[game.id] }}</strong>
+                                            </p>
+                                            <div class="position-absolute bottom-0 end-0">
+                                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal_{{ game.id }}">详情</button>
+                                            </div>
+                                        </div>
+                                        <div class="overflow-hidden" style="width: 140px; height: 180px;">
+                                            <img src="{{ url_for('static', filename=game.theme) }}" alt="" class="h-100 w-100 object-fit-cover">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal fade text-start" id="modal_{{ game.id }}" tabindex="-1" aria-labelledby="myModalLabel" style="display: none;" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="myModalLabel">{{ game.name }}</h5>
+                                                <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="card-body p-4">
+                                                <strong>规则：</strong><br>{{ game.rule }}<br><br>
+                                                <strong>背景介绍：</strong><br>{{ game.description }}<br><br>
+                                                <strong>QQ：</strong>{{ game.qq }}<br><br>
+                                                <strong>跑团桌位：</strong>{{ game.table }}
+                                            </div>
+                                            <div class="modal-footer">
+                                                {% if game.id in enrolled_game %}
+                                                <a class="btn btn-primary" style="display: block;" href="{{ url_for('remove_player', game_id=game.id) }}">取消报名</a>
+                                                <a class="btn btn-primary" style="display: none;" href="{{ url_for('add_player', game_id=game.id) }}">报名</a>
+                                                {% else %}
+                                                <a class="btn btn-primary" style="display: none;" href="{{ url_for('remove_player', game_id=game.id) }}">取消报名</a>
+                                                <a class="btn btn-primary" style="display: block;" href="{{ url_for('add_player', game_id=game.id) }}">报名</a>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </details>
+                    <details style="text-align: left;" open="">
+                        <summary style="line-height:3em;">下半场</summary>
+                        <div class="row">
+                            {% for game in day2_gamesB %}
+                                <div class="equal-height h-auto mb-3 col-xl-6 bg-white p-4 position-relative">
+                                    <div class="row">
+                                        <div style="width: calc(100% - 140px);" class="position-relative">
+                                            <div class="text-lg position-absolute top-0 end-0 opacity-25 text-gray-500" id="signed_{{ game.id }}" style="transform: rotate(20deg);display: none;">
+                                                <strong>已报名</strong>
+                                            </div>
+                                            <p class="mb-2 text-gray-500 text-start">
+                                                <strong style="font-size: 1.5rem;" class="text-primary">【{{ game.rule }}】{{ game.name }}</strong><br>
+                                                <strong>主持：</strong>{{ game.kp }}<br>
+                                                <strong>场次：</strong>下半场<br>
+                                            </p>
+                                            <p class="mb-0 text-gray-500 text-start">
+                                                剩余空位：<strong class="text-primary text-lg">{{ game.max_pl-space_reserved[game.id] }}</strong>
+                                            </p>
+                                            <div class="position-absolute bottom-0 end-0">
+                                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal_{{ game.id }}">详情</button>
+                                            </div>
+                                        </div>
+                                        <div class="overflow-hidden" style="width: 140px; height: 180px;">
+                                            <img src="{{ url_for('static', filename=game.theme) }}" alt="" class="h-100 w-100 object-fit-cover">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal fade text-start" id="modal_{{ game.id }}" tabindex="-1" aria-labelledby="myModalLabel" style="display: none;" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="myModalLabel">{{ game.name }}</h5>
+                                                <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="card-body p-4">
+                                                <strong>规则：</strong><br>{{ game.rule }}<br><br>
+                                                <strong>背景介绍：</strong><br>{{ game.description }}<br><br>
+                                                <strong>QQ：</strong>{{ game.qq }}<br><br>
+                                                <strong>跑团桌位：</strong>{{ game.table }}
+                                            </div>
+                                            <div class="modal-footer">
+                                                {% if game.id in enrolled_game %}
+                                                <a class="btn btn-primary" style="display: block;" href="{{ url_for('remove_player', game_id=game.id) }}">取消报名</a>
+                                                <a class="btn btn-primary" style="display: none;" href="{{ url_for('add_player', game_id=game.id) }}">报名</a>
+                                                {% else %}
+                                                <a class="btn btn-primary" style="display: none;" href="{{ url_for('remove_player', game_id=game.id) }}">取消报名</a>
+                                                <a class="btn btn-primary" style="display: block;" href="{{ url_for('add_player', game_id=game.id) }}">报名</a>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </details>
+                </div>
+            </div>
+        </div>
+    </div>
 </section>
+
+
 <!-- <div id="map">
 	<iframe frameborder="0" width="100%" height="100%" style="border: 0;"
 		src="http://apis.map.qq.com/tools/poimarker?type=0&marker=coord:29.550457,106.51751;title:幻想共振-Coptus;addr:重庆化龙桥印象城六楼Coptus|coord:29.550457,106.517512&key=OB4BZ-D4W3U-B7VVO-4PJWW-6TKDJ-WPB77&referer=myapp"></iframe>
@@ -602,6 +594,64 @@
         });
     });
 </script>
+
+<script>
+    // Initialize tabs on page load
+    document.addEventListener('DOMContentLoaded', function() {
+        console.log("Page loaded, initializing tabs");
+
+        // Initialize Bootstrap tabs
+        var tabElms = document.querySelectorAll('#myTab button[data-bs-toggle="tab"]');
+        tabElms.forEach(function(tabElm) {
+            tabElm.addEventListener('click', function(event) {
+                event.preventDefault();
+                var tabTarget = document.querySelector(this.dataset.bsTarget);
+
+                // Hide all tabs
+                document.querySelectorAll('.tab-pane').forEach(function(pane) {
+                    pane.classList.remove('show', 'active');
+                });
+
+                // Show this tab
+                tabTarget.classList.add('show', 'active');
+
+                // Update active state on buttons
+                document.querySelectorAll('#myTab button').forEach(function(btn) {
+                    btn.classList.remove('active');
+                    btn.setAttribute('aria-selected', 'false');
+                });
+
+                this.classList.add('active');
+                this.setAttribute('aria-selected', 'true');
+
+                console.log("Tab activated:", this.id);
+            });
+        });
+
+        // Mark enrolled games
+        const enrolledGames = {{ enrolled_js|safe }};
+        console.log("Enrolled games:", enrolledGames);
+
+        // Mark each enrolled game
+        enrolledGames.forEach(gameId => {
+            const signedElement = document.getElementById(`signed_${gameId}`);
+            if (signedElement) {
+                console.log(`Marking game ${gameId} as enrolled`);
+                signedElement.style.display = 'block';
+            }
+        });
+
+        // Make sure the active tab is shown by default
+        const activeTabBtn = document.querySelector('#myTab button.active');
+        if (activeTabBtn) {
+            console.log("Activating default tab:", activeTabBtn.id);
+            activeTabBtn.click();
+        }
+    });
+
+    // Rest of your existing scripts...
+</script>
+
 <!-- FontAwesome CSS - loading as last, so it doesn't block rendering-->
 <!-- <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css"
 	integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous"> -->
