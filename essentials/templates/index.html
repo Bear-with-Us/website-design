@@ -461,16 +461,20 @@
 				login_form.addEventListener('submit', (e) => {
 					e.preventDefault();
 
-					const username = document.getElementById('username').value;
-					const password = document.getElementById('password').value;
+					const username = login_form.querySelector('input[name="username"]').value;
+					const password = login_form.querySelector('input[name="password"]').value;
+
 					if (username && password) {
 						fetch('/login', {
 							method: 'POST',
+							headers: {
+								'Content-Type': 'application/json'
+							},
 							body: JSON.stringify({username, password}),
 						})
 						.then(res => res.json())
-					  	.then(data => {
-							  if (data.success) {
+						.then(data => {
+							if (data.success) {
 								loadBlock(); // Refresh the content for the logged-in view
 							} else {
 								alert('登录失败，请检查手机号和密码');
