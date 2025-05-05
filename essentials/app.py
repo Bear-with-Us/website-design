@@ -71,7 +71,6 @@ def admin():
         game_file = request.files['GameData']
         data = json.load(game_file)
         for item in data:
-            item["time"] = datetime.fromisoformat(item['time'])
             new_game = Game(**item)
             db.session.add(new_game)
             try:
