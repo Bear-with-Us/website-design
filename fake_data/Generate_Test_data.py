@@ -1,5 +1,6 @@
 from faker import Faker
 import random
+import json
 from database import db, Game, User, UserToGameId, Sponsor
 from flask import Flask
 
@@ -16,6 +17,12 @@ def seed_data():
     with app.app_context():
         db.drop_all()
         db.create_all()
+
+        # --- Prepare data structures to hold the data we generate ---
+        users_data = []
+        games_data = []
+        registrations_data = []
+        sponsors_data = []
 
         # --- Generate Users ---
         users = []
@@ -34,36 +41,79 @@ def seed_data():
                 group=group,
                 date=date
             )
+
+            # Add to database
             users.append(user)
             db.session.add(user)
 
+            # Add to our JSON data
+            users_data.append({
+                'phone': phone,
+                'password': user.password,
+                'group': group,
+                'date': date
+            })
+
         # --- Generate Sponsors ---
         for _ in range(10):
+            sponsor_id = fake.unique.lexify(text='S????')
+            sponsor_url = fake.url()
+
             sponsor = Sponsor(
-                id=fake.unique.lexify(text='S????'),
-                advert_urls=fake.url()
+                id=sponsor_id,
+                advert_urls=sponsor_url
             )
             db.session.add(sponsor)
+
+            sponsors_data.append({
+                'id': sponsor_id,
+                'advert_urls': sponsor_url
+            })
 
         # --- Generate Games ---
         games = []
         for _ in range(20):
+            game_id = fake.unique.lexify(text='G????')
             game_date = random.choice([1, 2])  # Random date for the game
+            game_name = fake.word()
+            game_kp = fake.name()
+            game_session = random.choice(['A', 'B'])
+            game_rule = fake.sentence(nb_words=10)
+            game_description = fake.sentence()
+            game_qq = fake.numerify(text='###########')
+            game_theme = f"image/image ({random.randint(1, 20)}).jpg"
+            game_table = str(random.randint(1, 20))
+            game_max_pl = random.randint(4, 12)
+
             game = Game(
-                id=fake.unique.lexify(text='G????'),
-                name=fake.word(),
-                kp=fake.name(),
+                id=game_id,
+                name=game_name,
+                kp=game_kp,
                 date=game_date,
-                session=random.choice(['A', 'B']),
-                rule=fake.sentence(nb_words=10),
-                description=fake.sentence(),
-                qq=fake.numerify(text='###########'),
-                theme = f"image/image ({random.randint(1, 20)}).jpg",  # Path to image
-                table=str(random.randint(1, 20)),
-                max_pl=random.randint(4, 12)  # Max players per game
+                session=game_session,
+                rule=game_rule,
+                description=game_description,
+                qq=game_qq,
+                theme=game_theme,
+                table=game_table,
+                max_pl=game_max_pl
             )
             games.append(game)
             db.session.add(game)
+
+            games_data.append({
+                'id': game_id,
+                'name': game_name,
+                'kp': game_kp,
+                'date': game_date,
+                'session': game_session,
+                'rule': game_rule,
+                'description': game_description,
+                'qq': game_qq,
+                'theme': game_theme,
+                'table': game_table,
+                'max_pl': game_max_pl
+            })
 
         db.session.commit()
 
@@ -94,8 +144,27 @@ def seed_data():
                         db.session.add(reg)
                         game_registrations[game.id] += 1  # Increment the registration count
 
+                        registrations_data.append({
+                            'user_id': user.phone,
+                            'game_id': game.id
+                        })
+
         db.session.commit()
-        print("✅ Test data generated!")
+
+        # --- Save the data to JSON files ---
+        with open('users.json', 'w', encoding='utf-8') as f:
+            json.dump(users_data, f, indent=4, ensure_ascii=False)
+
+        with open('games.json', 'w', encoding='utf-8') as f:
+            json.dump(games_data, f, indent=4, ensure_ascii=False)
+
+        with open('registrations.json', 'w', encoding='utf-8') as f:
+            json.dump(registrations_data, f, indent=4, ensure_ascii=False)
+
+        with open('sponsors.json', 'w', encoding='utf-8') as f:
+            json.dump(sponsors_data, f, indent=4, ensure_ascii=False)
+
+        print("✅ Test data generated and saved to JSON files!")
 
 
 if __name__ == "__main__":

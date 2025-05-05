@@ -209,14 +209,14 @@
                                                 <strong>跑团桌位：</strong>{{ game.table }}
                                             </div>
                                             <div class="modal-footer">
-                                                {% if game.id in enrolled_game %}
-                                                <a class="btn btn-primary" style="display: block;" href="{{ url_for('remove_player', game_id=game.id) }}">取消报名</a>
-                                                <a class="btn btn-primary" style="display: none;" href="{{ url_for('add_player', game_id=game.id) }}">报名</a>
-                                                {% else %}
-                                                <a class="btn btn-primary" style="display: none;" href="{{ url_for('remove_player', game_id=game.id) }}">取消报名</a>
-                                                <a class="btn btn-primary" style="display: block;" href="{{ url_for('add_player', game_id=game.id) }}">报名</a>
-                                                {% endif %}
-                                            </div>
+												{% if game.id in enrolled_game %}
+												<a class="btn btn-primary" style="display: block;" href="{{ url_for('remove_player', game_id=game.id) }}" onclick="return handleGameAction(this)">取消报名</a>
+												<a class="btn btn-primary" style="display: none;" href="{{ url_for('add_player', game_id=game.id) }}" onclick="return handleGameAction(this)">报名</a>
+												{% else %}
+												<a class="btn btn-primary" style="display: none;" href="{{ url_for('remove_player', game_id=game.id) }}" onclick="return handleGameAction(this)">取消报名</a>
+												<a class="btn btn-primary" style="display: block;" href="{{ url_for('add_player', game_id=game.id) }}" onclick="return handleGameAction(this)">报名</a>
+												{% endif %}
+											</div>
                                         </div>
                                     </div>
                                 </div>
@@ -264,14 +264,14 @@
                                                 <strong>跑团桌位：</strong>{{ game.table }}
                                             </div>
                                             <div class="modal-footer">
-                                                {% if game.id in enrolled_game %}
-                                                <a class="btn btn-primary" style="display: block;" href="{{ url_for('remove_player', game_id=game.id) }}">取消报名</a>
-                                                <a class="btn btn-primary" style="display: none;" href="{{ url_for('add_player', game_id=game.id) }}">报名</a>
-                                                {% else %}
-                                                <a class="btn btn-primary" style="display: none;" href="{{ url_for('remove_player', game_id=game.id) }}">取消报名</a>
-                                                <a class="btn btn-primary" style="display: block;" href="{{ url_for('add_player', game_id=game.id) }}">报名</a>
-                                                {% endif %}
-                                            </div>
+												{% if game.id in enrolled_game %}
+												<a class="btn btn-primary" style="display: block;" href="{{ url_for('remove_player', game_id=game.id) }}" onclick="return handleGameAction(this)">取消报名</a>
+												<a class="btn btn-primary" style="display: none;" href="{{ url_for('add_player', game_id=game.id) }}" onclick="return handleGameAction(this)">报名</a>
+												{% else %}
+												<a class="btn btn-primary" style="display: none;" href="{{ url_for('remove_player', game_id=game.id) }}" onclick="return handleGameAction(this)">取消报名</a>
+												<a class="btn btn-primary" style="display: block;" href="{{ url_for('add_player', game_id=game.id) }}" onclick="return handleGameAction(this)">报名</a>
+												{% endif %}
+											</div>
                                         </div>
                                     </div>
                                 </div>
@@ -423,13 +423,14 @@
 </footer>
 <!-- 通知 -->
 <div class="toast-container position-fixed top-0 end-0 p-4">
-	<div class="toast fade hide" role="alert" aria-live="assertive" aria-atomic="true" id="msgbox">
-		<div class="toast-header"><strong class="me-auto">提示</strong><!-- <small>11 mins ago</small> -->
-			<button class="btn-close" type="button" data-bs-dismiss="toast" aria-label="Close"></button>
-		</div>
-		<div class="toast-body">密码错误！</div>
-	</div>
+    <div class="toast fade hide" role="alert" aria-live="assertive" aria-atomic="true" id="msgbox">
+        <div class="toast-header"><strong class="me-auto">提示</strong>
+            <button class="btn-close" type="button" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+        <div class="toast-body"></div>  <!-- Empty content -->
+    </div>
 </div>
+
 
 
 <script src="{{ url_for('static', filename="js/home-premium.js") }}"> </script>
