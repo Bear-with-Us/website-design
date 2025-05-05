@@ -2,7 +2,7 @@ import json
 import logging
 from flask import Flask, render_template, url_for, request, session, redirect, jsonify
 from sqlalchemy.exc import SQLAlchemyError
-from database import db, User, Game, UserToGameId
+from database import db, User, Game, UserToGameId, Sponsor
 from sqlalchemy.exc import IntegrityError
 from datetime import datetime
 
@@ -52,46 +52,74 @@ def home():
                            enrolled_game=enrolled_game,
                            enrolled_js=enrolled_js)
 
+
 @app.route('/admin', methods=['POST', 'GET'])
 def admin():
-    if "UserData" in request.files:
-        user_file = request.files['UserData']
-        data = json.load(user_file)
-        for item in data:
-            new_user = User(**item)
-            db.session.add(new_user)
-            try:
-                db.session.commit()
-                logging.info("✅ Game data committed successfully.")
-            except SQLAlchemyError as e:
-                db.session.rollback()
-                logging.info(f"❌ Commit failed: {e}")
+    # Check if user is logged in and has admin privileges
+    user_id = session.get('user_id')
 
-    if "GameData" in request.files:
-        game_file = request.files['GameData']
-        data = json.load(game_file)
-        for item in data:
-            new_game = Game(**item)
-            db.session.add(new_game)
-            try:
-                db.session.commit()
-                print("✅ Game data committed successfully.")
-            except SQLAlchemyError as e:
-                db.session.rollback()
-                print(f"❌ Commit failed: {e}")
+    # If not logged in as admin, redirect to home page
+    if user_id != 20611741:
+        # Option 1: Redirect to home page
+        return redirect(url_for('home'))
 
-    if "Register" in request.files:
-        reg_file = request.files['Register']
-        data = json.load(reg_file)
-        for item in data:
-            new_pair = UserToGameId(**item)
-            db.session.add(new_pair)
-            try:
-                db.session.commit()
-                print("✅ Game data committed successfully.")
-            except SQLAlchemyError as e:
-                db.session.rollback()
-                print(f"❌ Commit failed: {e}")
+        # Option 2: Or return an error message
+        # return jsonify({"error": "未授权访问管理员页面"}), 403
+
+    # Process file uploads if this is a POST request from an admin
+    if request.method == 'POST':
+        if "UserData" in request.files:
+            user_file = request.files['UserData']
+            data = json.load(user_file)
+            for item in data:
+                new_user = User(**item)
+                db.session.add(new_user)
+                try:
+                    db.session.commit()
+                    logging.info("✅ User data committed successfully.")
+                except SQLAlchemyError as e:
+                    db.session.rollback()
+                    logging.info(f"❌ Commit failed: {e}")
+
+        if "GameData" in request.files:
+            game_file = request.files['GameData']
+            data = json.load(game_file)
+            for item in data:
+                new_game = Game(**item)
+                db.session.add(new_game)
+                try:
+                    db.session.commit()
+                    print("✅ Game data committed successfully.")
+                except SQLAlchemyError as e:
+                    db.session.rollback()
+                    print(f"❌ Commit failed: {e}")
+
+        if "Register" in request.files:
+            reg_file = request.files['Register']
+            data = json.load(reg_file)
+            for item in data:
+                new_pair = UserToGameId(**item)
+                db.session.add(new_pair)
+                try:
+                    db.session.commit()
+                    print("✅ Registration data committed successfully.")
+                except SQLAlchemyError as e:
+                    db.session.rollback()
+                    print(f"❌ Commit failed: {e}")
+
+        if "SponsorData" in request.files:
+            sponsor_file = request.files['SponsorData']
+            data = json.load(sponsor_file)
+            for item in data:
+                from database import Sponsor  # Import if not already imported
+                new_sponsor = Sponsor(**item)
+                db.session.add(new_sponsor)
+                try:
+                    db.session.commit()
+                    print("✅ Sponsor data committed successfully.")
+                except SQLAlchemyError as e:
+                    db.session.rollback()
+                    print(f"❌ Commit failed: {e}")
 
     return render_template("admin.html")
 
