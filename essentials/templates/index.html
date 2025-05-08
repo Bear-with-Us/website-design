@@ -17,17 +17,17 @@
 </nav>
 <!-- INTRO SECTION-->
 <section class="intro bg-cover bg-center d-flex align-items-center dark-overlay" id="intro">
-	<div class="parallax" style="background-image: url('{{ url_for('static', filename='image/VR3.png') }}'); height: 799.222px; top: -496.444px;"></div>
+	<div class="parallax" style="background-image: url('{{ url_for('static', filename='image/底图.png') }}'); height: 799.222px; top: -496.444px;"></div>
 	<div class="overlay-content text-white w-100">
 		<div class="container text-center">
 			<div class="row">
 				<div class="col-lg-11 mx-auto">
 
-					<h1 class="intro-heading my-5 wow fadeInDown" data-wow-delay="0s" style="visibility: visible; animation-delay: 0s; animation-name: fadeInDown;"><img src="{{ url_for('static',filename="image/tt.webp") }}" alt="title1" style="max-width: 100%;">
+					<h1 class="intro-heading my-5 wow fadeInDown" data-wow-delay="0s" style="visibility: visible; animation-delay: 0s; animation-name: fadeInDown;"><img src="{{ url_for('static',filename="image/云雾LOGO.png") }}" alt="title1" style="max-width: 100%;">
 					</h1>
 
-
-					<p class="h3 intro-text fw-normal wow fadeInUp" data-wow-delay="0.5s" style="visibility: visible; animation-delay: 0.5s; animation-name: fadeInUp;"><img src="{{ url_for('static',filename="image/骰子.webp") }}" alt="title2" style="max-width: 100%;margin-top:-20%"></p>
+					<p class="h3 intro-text fw-normal wow fadeInUp" data-wow-delay="0.5s" style="visibility: visible; animation-delay: 0.5s; animation-name: fadeInUp;"><img src="{{ url_for('static',filename="image/骰子.png") }}" alt="title2" style="max-width: 100%;margin-top:-20%"></p>
+					<p class="h3 intro-text fw-normal wow fadeInUp" data-wow-delay="0.5s" style="visibility: visible; animation-delay: 0.5s; animation-name: fadeInUp;"><img src="{{ url_for('static',filename="image/杂锅.png") }}" alt="title2" style="max-width: 120%;margin-top:-20%"></p>
 
 				</div>
 			</div>
@@ -146,12 +146,6 @@
     <div class="container text-center">
         <!-- Only login/user info changes dynamically -->
         <div id="dynamic-content">Loading...</div>
-
-        <!-- Debug info for troubleshooting -->
-        <div id="debug-info" class="small text-muted mb-3">
-            Game data: Day1A({{ day1_gamesA|length }}), Day1B({{ day1_gamesB|length }}),
-            Day2A({{ day2_gamesA|length }}), Day2B({{ day2_gamesB|length }})
-        </div>
 
         <!-- Game tabs and listing remain static -->
         <div id="game-tabs-container" class="mt-4">

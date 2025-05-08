@@ -10,12 +10,9 @@ from datetime import datetime
 logging.basicConfig(level=logging.INFO)
 app = Flask('FlaskWeb')
 app.config['SECRET_KEY'] = 'mysecretkey123'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///VR3.db'
+#app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///VR3.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////home/deployer/app/essentials/instance/VR3.db'
 db.init_app(app)
-
-
-def initialise_db():
-    db.create_all()
 
 
 @app.route('/')
@@ -217,7 +214,7 @@ def remove_player():
     except Exception as e:
         db.session.rollback()
         return jsonify({"error": "服务器错误喵(╥﹏╥)"}), 500
-
+    
 
 @app.route('/login', methods=['POST'])
 def login():
@@ -261,6 +258,6 @@ def logout():
 
 if __name__ == "__main__":
     with app.app_context():
-        initialise_db()
+        db.create_all()
 
     app.run(debug=True, use_reloader=False)

@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>PC2·传送门跑团嘉年华2.0</title>
+    <title>VR3 幻想共振</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="robots" content="all,follow">
@@ -27,7 +27,7 @@
     <!-- Favicon-->
     <link rel="shortcut icon" href="favicon.ico">
     <!-- 优先加载标题背景 -->
-    <link rel="preload" href="{{ url_for('static', filename="image/bg.webp") }}"as="image">
+    <link rel="preload" href="{{ url_for('static', filename="image/底图.png") }}"as="image">
     <script src="https://hm.baidu.com/hm.js?7eca61139bcaff15e4179534c2373391"></script>
     <script>
         var _hmt = _hmt || [];
@@ -40,12 +40,12 @@
     </script>
     <style>
         :root {
-            --bs-primary: #2b624a;
+            --bs-primary: #43000a;
             --bs-primary-rgb: 43, 98, 74;
-            --color2: #255640;
+            --color2: #e00860;
             --color2-rgb: 37, 86, 64;
-            --color3: #204c38;
-            --color-bg: #f9fbf8;
+            --color3: #e00860;
+            --color-bg: #ccbea1;
             --bs-link-color: var(--bs-primary);
             --bs-link-color-rgb: var(--bs-primaryrimary-rgb);
             --bs-link-hover-color: var(--color2);
@@ -63,7 +63,9 @@
             --bs-btn-disabled-bg: var(--bs-primary);
             --bs-btn-disabled-border-color: var(--bs-primary);
         }
-
+        .text-primary{
+            color: var(--bs-primary) !important;
+        }
         .nav {
             --bs-nav-link-padding-x: 1rem;
             --bs-nav-link-padding-y: 0.5rem;
