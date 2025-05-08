@@ -11,7 +11,7 @@ logging.basicConfig(level=logging.INFO)
 app = Flask('FlaskWeb')
 app.config['SECRET_KEY'] = 'mysecretkey123'
 #app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///VR3.db'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////home/deployer/app/essentials/instance/VR3.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////home/deployer/app/essentials/VR3.db'
 db.init_app(app)
 
 
