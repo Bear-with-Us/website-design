@@ -160,8 +160,9 @@ def add_player():
 
     # Get objects
     user = db.session.get(User, user_id)
+    user_group = User.getGroupViaPlayer(user_id)
     game = db.session.get(Game, game_id)
-
+    enrolled_game = len(UserToGameId.getGamesViaPlayer(user_id))
     if not user or not game:
         return jsonify({"error": "用户或游戏不存在喵"}), 400
 
@@ -180,6 +181,12 @@ def add_player():
     current_players = db.session.query(UserToGameId).filter_by(game_id=game_id).count()
     if current_players >= game.max_pl:
         return jsonify({"error": "这个团已经满了喵(っ °Д °;)っ"}), 400
+
+    # Check the max game limit
+    if user_group == 'Normal' and enrolled_game > 0:
+        return jsonify({"error": "您的限额到了喵(っ °Д °;)っ"}), 300
+    if user_group == 'Vip' and enrolled_game >= 2:
+        return jsonify({"error": "您的限额到了喵(っ °Д °;)っ"}), 300
 
     # Register user
     new_register = UserToGameId(game_id=game_id, user_id=user_id)
