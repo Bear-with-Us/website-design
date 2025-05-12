@@ -1,0 +1,71 @@
+* [33mb37a64b[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m uploaded background pics
+* [33m95e0f8c[m adapt to the server side
+* [33mb0bd25b[m adapt to the server side
+* [33m4250051[m Removed the ‘登陆后查看’
+* [33m6a5cb85[m Now admin page only can be accessed using admin account
+* [33md43d2c8[m Watch Last Commit's comment. I update the upload function for game to keep the same format as the database
+* [33m6be6ea9[m Update the Generate_Test_data.py to convert the output from sql into json
+* [33m8dc408b[m Change UserToGameId model to match the Game model's ID type
+* [33mfcc32db[m Fix Issue: add player and remove player bugs
+* [33mc93343a[m Fix Issue: Game Information Not Showing After Login
+* [33ma83825d[m Fix the vip user cant see the correct output
+* [33m5bf955a[m Fix login bugs in index.html
+* [33m9d5e53e[m correct the form of path
+* [33m21059da[m fix a small bug
+* [33m5e203c8[m fix few bugs in add player and get block
+* [33md1f2493[m fix a small bug in logic
+* [33me195e52[m add fake data generator to generate random fake data for testing code
+* [33me3f9f21[m Update README.md
+* [33m050b461[m Update README.md
+* [33m607301d[m Update README.md
+* [33mb629489[m Delete favicon.ico
+* [33m8b258ee[m Delete 跑团活动报名页.exe
+* [33m41287bb[m Update README.md
+* [33m020d0a7[m Delete essentials/Sign in.html
+* [33mddb59a5[m Delete essentials/PC2·传送门跑团嘉年华2.0.html
+* [33m50cf67b[m updated the database.py and removed some unused functions in app.py
+* [33m3c70cf4[m updated the database.py and removed some unused functions in app.py
+* [33m4a29a46[m updated the format, so all of them use url_for() for flask application
+* [33m8214abf[m updated the format, so all of them use url_for() for flask application
+* [33m3fd8c19[m uploaded all the dependencies
+* [33m4e43568[m update login in app.py
+* [33m0f10301[m rework
+* [33m770da4a[m I update the logout and login. Also I add the quit bottom to quit the game. And I also improve the add and remove player
+*   [33m8062c63[m Merge remote-tracking branch 'origin/main'
+[32m|[m[33m\[m  
+[32m|[m * [33mdc4bd5b[m removed login page from home
+* [33m|[m [33m8447800[m adding the logout into the page
+[33m|[m[33m/[m  
+* [33m28f2ed1[m adding the response to register
+* [33mb323fed[m added unit tests for all relevant files
+* [33m1252b97[m try to solve add player
+* [33m1dea999[m Solved the popup function
+* [33ma3c38d8[m keep the form of input data from web the same as the form from database
+* [33m0833018[m keep the form of input data from web the same as the form from database
+* [33m20be490[m Style added
+* [33m3479a9a[m Style added
+* [33m6ae360a[m change needed
+* [33mfe3ad86[m updated the format
+* [33mb341a34[m added input example data
+* [33m5032670[m changed game_id column to id
+*   [33m1cc78e6[m Merge remote-tracking branch 'origin/main'
+[34m|[m[35m\[m  
+[34m|[m * [33m06406cb[m Update README.md
+[34m|[m * [33m2287495[m version 0.0.3, changed the name of the folder so it makes more sense
+[34m|[m * [33me8b21ac[m version 0.0.3, reformatted the page, added background.css, login.css
+[34m|[m * [33m8d14913[m version 0.0.2 with another column added to the Game table
+* [35m|[m [33m5170e9c[m version 0.0.1
+[35m|[m[35m/[m  
+* [33mc8f639f[m version 0.0.1
+* [33me09c24d[m Vague functionalities of the website
+* [33m38f7d2d[m remove unwanted comments
+* [33m4f23b3f[m So I have tested all function. And they all work
+* [33m3703fa9[m All functions have been set
+* [33mc587ead[m minor changes no need to view
+* [33m43f10df[m minor changes no need to view
+* [33ma085bd0[m minor changes no need to view
+* [33m34b3645[m added more guide towards the implementations
+* [33mbc21af7[m Used new dialect for SQL: Replaced sqlite using SQLAlchemy, functions needed to be implemented are denoted with "pass"
+* [33m2b693ef[m Initialized the database, run initialisation.py  twice to avoid missing table
+* [33mfa7d014[m Initialized the database, run initialisation.py  twice to avoid missing table
+* [33m7142804[m Initial commit
