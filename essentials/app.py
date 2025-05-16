@@ -1,17 +1,19 @@
 import json
 import logging
+import sys
+
 from flask import Flask, render_template, url_for, request, session, redirect, jsonify
 from sqlalchemy.exc import SQLAlchemyError
 from database import db, User, Game, UserToGameId, Sponsor
 from sqlalchemy.exc import IntegrityError
 from datetime import datetime
-
+from zoneinfo import ZoneInfo
 
 logging.basicConfig(level=logging.INFO)
 app = Flask('FlaskWeb')
 app.config['SECRET_KEY'] = 'mysecretkey123'
-#app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///VR3.db'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////home/deployer/app/essentials/VR3.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///VR3.db'
+#app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////home/deployer/app/essentials/VR3.db'
 db.init_app(app)
 
 
@@ -73,23 +75,24 @@ def admin():
                 db.session.add(new_user)
                 try:
                     db.session.commit()
-                    logging.info("✅ User data committed successfully.")
+                    app.logger.warning("✅ committed rows successfully")
                 except SQLAlchemyError as e:
                     db.session.rollback()
-                    logging.info(f"❌ Commit failed: {e}")
+                    app.logger.warning(f"❌ Commit failed: {e}")
 
         if "GameData" in request.files:
             game_file = request.files['GameData']
+            app.logger.warning("📦 received file: %s", game_file.filename if game_file else 'None')
             data = json.load(game_file)
             for item in data:
                 new_game = Game(**item)
                 db.session.add(new_game)
                 try:
                     db.session.commit()
-                    print("✅ Game data committed successfully.")
+                    app.logger.warning("✅ Game data committed successfully.")
                 except SQLAlchemyError as e:
                     db.session.rollback()
-                    print(f"❌ Commit failed: {e}")
+                    app.logger.warning(f"❌ Commit failed: {e}")
 
         if "Register" in request.files:
             reg_file = request.files['Register']
@@ -99,10 +102,10 @@ def admin():
                 db.session.add(new_pair)
                 try:
                     db.session.commit()
-                    print("✅ Registration data committed successfully.")
+                    app.logger.warning("✅ Registration data committed successfully.")
                 except SQLAlchemyError as e:
                     db.session.rollback()
-                    print(f"❌ Commit failed: {e}")
+                    app.logger.warning(f"❌ Commit failed: {e}")
 
         if "SponsorData" in request.files:
             sponsor_file = request.files['SponsorData']
@@ -113,10 +116,10 @@ def admin():
                 db.session.add(new_sponsor)
                 try:
                     db.session.commit()
-                    print("✅ Sponsor data committed successfully.")
+                    app.logger.warning("✅ Sponsor data committed successfully.")
                 except SQLAlchemyError as e:
                     db.session.rollback()
-                    print(f"❌ Commit failed: {e}")
+                    app.logger.warning(f"❌ Commit failed: {e}")
 
     return render_template("admin.html")
 
@@ -154,7 +157,9 @@ def add_player():
     # Get game_id from either query parameters (GET) or request body (POST)
     game_id = request.args.get('game_id')
     user_id = session.get('user_id')
-
+    current_time = datetime.now(ZoneInfo("Asia/Shanghai"))
+    VIP_starting_time = datetime(2025, 5, 15, 20, 0, 0, tzinfo=ZoneInfo("Asia/Shanghai"))
+    Normal_starting_time = datetime(2025, 5, 16, 12, 0, 0, tzinfo=ZoneInfo("Asia/Shanghai"))
     if not user_id:
         return jsonify({"error": "没有登陆呢喵╮(￣▽ ￣)╭刷新一下喵"}), 401
 
@@ -183,10 +188,20 @@ def add_player():
         return jsonify({"error": "这个团已经满了喵(っ °Д °;)っ"}), 400
 
     # Check the max game limit
-    if user_group == 'Normal' and enrolled_game > 0:
+    if user_group == 'Normal' and enrolled_game >=1:
+        db.session.rollback()
         return jsonify({"error": "您的限额到了喵(っ °Д °;)っ"}), 300
-    if user_group == 'Vip' and enrolled_game >= 2:
+    if user_group == 'VIP' and enrolled_game >= 2:
+        db.session.rollback()
         return jsonify({"error": "您的限额到了喵(っ °Д °;)っ"}), 300
+
+    #Check if current time is the starting time
+    if current_time < Normal_starting_time and user_group == 'Normal':
+        db.session.rollback()
+        return jsonify({"error": "还没到时间呢喵(っ °Д °;)っ"}), 400
+    if current_time < VIP_starting_time and user_group == 'VIP':
+        db.session.rollback()
+        return jsonify({"error": "还没到时间呢喵(っ °Д °;)っ"}), 400
 
     # Register user
     new_register = UserToGameId(game_id=game_id, user_id=user_id)
@@ -221,7 +236,7 @@ def remove_player():
     except Exception as e:
         db.session.rollback()
         return jsonify({"error": "服务器错误喵(╥﹏╥)"}), 500
-    
+
 
 @app.route('/login', methods=['POST'])
 def login():
@@ -266,5 +281,4 @@ def logout():
 if __name__ == "__main__":
     with app.app_context():
         db.create_all()
-
     app.run(debug=True, use_reloader=False)

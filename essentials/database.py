@@ -94,7 +94,7 @@ class UserToGameId(db.Model):
     game_id = db.Column(db.Integer, db.ForeignKey('GameInfo.id'), primary_key=True)
 
     @staticmethod
-    def getPlayersViaGame(game: int) -> list:
+    def getPlayersViaGame(game) -> list:
         return [player.user_id for player in db.session.query(UserToGameId).filter_by(game_id=game).all()]
 
     @staticmethod
