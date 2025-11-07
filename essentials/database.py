@@ -1,7 +1,7 @@
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import DateTime, Date, LargeBinary
 
-db = SQLAlchemy()
+
 
 
 class Game(db.Model):
